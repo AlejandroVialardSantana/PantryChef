@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1026884450876",
+    "project_id": "pantrychef-da3b7",
+    "storage_bucket": "pantrychef-da3b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026884450876:android:60cae6c86fa20fa56da139",
+        "android_client_info": {
+          "package_name": "com.avs.pantrychef"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFrTHaFtP9YrTVJ1BpHtwjb6SBXhtTA2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

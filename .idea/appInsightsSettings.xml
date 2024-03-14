@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.avs.pantrychef" />
+                  <option name="mobileSdkAppId" value="1:1026884450876:android:60cae6c86fa20fa56da139" />
+                  <option name="projectId" value="pantrychef-da3b7" />
+                  <option name="projectNumber" value="1026884450876" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
