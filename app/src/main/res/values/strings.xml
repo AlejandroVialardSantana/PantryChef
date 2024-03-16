@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">PantryChef</string>
+    <string name="orText">O</string>
+    <string name="appName">Pantry<b>Chef</b></string>
+    <string name="forgetPasswordText">¿Olvidaste la contraseña?</string>
+    <string name="changeText"><u>Cambiar</u></string>
+    <string name="login">Iniciar sesión</string>
+    <string name="loginGoogle">Iniciar con Google</string>
+    <string name="register">Crear cuenta</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="textResetPassword">Introduzca su email de la cuenta. Le enviaremos instrucciones para restablecer su contraseña.</string>
+    <string name="resetPassword">Enviar</string>
+    <string name="haveAccountText">¿Ya tienes cuenta?</string>
+    <string name="loginLink">Iniciar sesión</string>
+    <string name="noAccountText">¿No tienes cuenta?</string>
+    <string name="registerLink"><u>Regístrate</u></string>
 </resources>

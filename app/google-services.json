@@ -12,7 +12,20 @@
           "package_name": "com.avs.pantrychef"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1026884450876-ei8vnenfehh8hitifnbsg2sstp866g7s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.avs.pantrychef",
+            "certificate_hash": "3912a7804c161e209387e9a4cdfb8dad22918b41"
+          }
+        },
+        {
+          "client_id": "1026884450876-lmtd54ij3b2f161jauigmdu7n6nf7jan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAFrTHaFtP9YrTVJ1BpHtwjb6SBXhtTA2w"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026884450876-lmtd54ij3b2f161jauigmdu7n6nf7jan.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
