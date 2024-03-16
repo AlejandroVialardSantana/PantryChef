@@ -1,14 +1,17 @@
 package com.avs.pantrychef.view.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.AuthController
+import org.w3c.dom.Text
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,6 +25,8 @@ class LoginActivity : AppCompatActivity() {
 
         val backIcon: ImageView = findViewById(R.id.backIcon)
         val loginButton: Button = findViewById(R.id.loginPageButton)
+        val signUpLink: TextView = findViewById(R.id.signUpLink)
+        val forgotPasswordLink: TextView = findViewById(R.id.changePasswordLink)
 
         backIcon.setOnClickListener {
             finish()
@@ -32,8 +37,18 @@ class LoginActivity : AppCompatActivity() {
             val password = findViewById<EditText>(R.id.passwordLoginInput).text.toString()
 
             if (validateLogin(email, password)) {
-                authController.signIn(email, password, ::onLoginSuccess, ::onLoginFailure)
+                authController.logIn(email, password, ::onLoginSuccess, ::onLoginFailure)
             }
+        }
+
+        signUpLink.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
+        forgotPasswordLink.setOnClickListener {
+            val intent = Intent(this, ResetPasswordActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -54,6 +69,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onLoginSuccess() {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
+
+        val homeActivity = Intent(this, HomeActivity::class.java)
+        startActivity(homeActivity)
+        finish()
     }
 
     private fun onLoginFailure() {

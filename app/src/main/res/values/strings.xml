@@ -8,10 +8,11 @@
     <string name="register">Crear cuenta</string>
     <string name="email">Correo electrónico</string>
     <string name="password">Contraseña</string>
+    <string name="confirmPassword">Confirmar contraseña</string>
     <string name="textResetPassword">Introduzca su email de la cuenta. Le enviaremos instrucciones para restablecer su contraseña.</string>
     <string name="resetPassword">Enviar</string>
     <string name="haveAccountText">¿Ya tienes cuenta?</string>
-    <string name="loginLink">Iniciar sesión</string>
+    <string name="loginLink"><u>Iniciar sesión</u></string>
     <string name="noAccountText">¿No tienes cuenta?</string>
     <string name="registerLink"><u>Regístrate</u></string>
 </resources>
