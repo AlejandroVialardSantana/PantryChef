@@ -6,4 +6,6 @@
     <color name="mainButtonColor">#132324</color>
     <color name="buttonColor">#483C46</color>
     <color name="contrastColor">#3C6E71</color>
+    <color name="bottomNavItemChecked">#2A2229</color>
+    <color name="transparent">#00000000</color>
 </resources>

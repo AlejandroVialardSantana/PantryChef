@@ -15,4 +15,9 @@
     <string name="loginLink"><u>Iniciar sesión</u></string>
     <string name="noAccountText">¿No tienes cuenta?</string>
     <string name="registerLink"><u>Regístrate</u></string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Inicio</string>
+    <string name="shopping">Compras</string>
+    <string name="favs">Favoritos</string>
 </resources>
