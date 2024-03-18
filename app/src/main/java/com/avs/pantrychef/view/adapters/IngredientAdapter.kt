@@ -40,6 +40,11 @@ class IngredientAdapter(private val ingredients: List<Ingredient>) :
         holder.itemView.setOnClickListener {
             toggleIngredientSelection(ingredient)
         }
+
+        // Manejar clics en el checkbox para agregar/quitar de la lista de seleccionados
+        holder.ingredientCheckbox.setOnClickListener {
+            toggleIngredientSelection(ingredient)
+        }
     }
 
     override fun getItemCount(): Int = filteredIngredients.size
