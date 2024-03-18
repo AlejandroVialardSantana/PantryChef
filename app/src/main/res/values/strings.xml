@@ -1,4 +1,5 @@
 <resources>
+
     <string name="orText">O</string>
     <string name="appName">Pantry<b>Chef</b></string>
     <string name="forgetPasswordText">¿Olvidaste la contraseña?</string>
@@ -20,4 +21,13 @@
     <string name="home">Inicio</string>
     <string name="shopping">Compras</string>
     <string name="favs">Favoritos</string>
+
+    <!-- Home -->
+    <string name="searchText">Pulsa para añadir los ingredientes</string>
+
+    <!-- Ingredients List -->
+    <string name="searchRecipes">Buscar recetas</string>
+    <string name="addIngredients">Escribe los ingredientes que tengas</string>
+    <string name="noResults">No tenemos ese ingrediente</string>
+
 </resources>
