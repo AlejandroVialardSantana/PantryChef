@@ -1,6 +1,9 @@
 package com.avs.pantrychef.view.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
@@ -28,5 +31,33 @@ class HomeActivity: AppCompatActivity() {
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigation)
         bottomNavigationView.setupWithNavController(navController)
+
+        setupUserIconMenu()
+    }
+
+    private fun setupUserIconMenu() {
+        val userIcon = findViewById<ImageView>(R.id.userIcon)
+        userIcon.setOnClickListener {
+            val popupMenu = PopupMenu(this, userIcon)
+            popupMenu.menuInflater.inflate(R.menu.user_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.logout -> {
+                        authController.logOut()
+
+                        // Navegar a la pantalla main
+                        val intent = Intent(this, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(intent)
+                        finish()
+
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 }
