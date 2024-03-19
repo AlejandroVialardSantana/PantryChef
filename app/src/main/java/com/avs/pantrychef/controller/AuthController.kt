@@ -42,5 +42,13 @@ class AuthController(private val context: Context) {
             }
         }
     }
+
+    fun isUserLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
+
+    fun logOut() {
+        auth.signOut()
+    }
 }
 

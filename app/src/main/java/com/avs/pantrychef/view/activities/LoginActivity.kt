@@ -66,11 +66,12 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
-
     private fun onLoginSuccess() {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
 
-        val homeActivity = Intent(this, HomeActivity::class.java)
+        val homeActivity = Intent(this, HomeActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         startActivity(homeActivity)
         finish()
     }
