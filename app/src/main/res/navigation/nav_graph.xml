@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.avs.pantrychef.view.fragments.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_searchIngredientDialogFragment"
+            app:destination="@id/searchIngredientDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/searchIngredientDialogFragment"
+        android:name="com.avs.pantrychef.view.fragments.SearchIngredientDialogFragment"
+        android:label="SearchIngredientDialogFragment"
+        tools:layout="@layout/dialog_search_ingredient">
+        <action
+            android:id="@+id/action_searchIngredientDialogFragment_to_receiptListFragment"
+            app:destination="@id/receiptListFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/receiptListFragment"
+        android:name="com.avs.pantrychef.view.fragments.ReceiptListFragment"
+        android:label="ReceiptListFragment"
+        tools:layout="@layout/fragment_receipt_list" >
+        <argument
+            android:name="ingredientIds"
+            app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="com.avs.pantrychef.view.fragments.ShoppingListFragment"
+        android:label="ShoppingListFragment"
+        tools:layout="@layout/fragment_shopping" />
+    <fragment
+        android:id="@+id/favsFragment"
+        android:name="com.avs.pantrychef.view.fragments.FavsFragment"
+        android:label="FavsFragment"
+        tools:layout="@layout/fragment_favs" />
+</navigation>

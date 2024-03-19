@@ -3,6 +3,8 @@ package com.avs.pantrychef.view.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.AuthController
 import com.avs.pantrychef.view.fragments.FavsFragment
@@ -14,42 +16,17 @@ class HomeActivity: AppCompatActivity() {
 
         private lateinit var authController: AuthController
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_home)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_home)
 
-            authController = AuthController(this)
+        authController = AuthController(this)
 
-            val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigation)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
 
-            bottomNavigationView.setOnItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.navigation_home -> {
-                        loadFragment(HomeFragment())
-                        true
-                    }
+        val navController = navHostFragment.navController
 
-                    R.id.navigation_shopping -> {
-                        loadFragment(ShoppingListFragment())
-                        true
-                    }
-
-                    R.id.navigation_favs -> {
-                        loadFragment(FavsFragment())
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-
-            if (savedInstanceState == null) {
-                loadFragment(HomeFragment())
-                bottomNavigationView.selectedItemId = R.id.navigation_home
-            }
-        }
-
-        private fun loadFragment(fragment: Fragment) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit()
-        }
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigation)
+        bottomNavigationView.setupWithNavController(navController)
+    }
 }

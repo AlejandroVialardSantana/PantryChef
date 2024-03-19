@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.FrameLayout
+import androidx.navigation.fragment.findNavController
 import com.avs.pantrychef.R
 
 class HomeFragment : Fragment() {
@@ -24,8 +24,8 @@ class HomeFragment : Fragment() {
         val searchButton: FrameLayout = view.findViewById(R.id.searchButton)
 
         searchButton.setOnClickListener {
-            val dialogFragment = SearchIngredientDialogFragment()
-            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
+           val action = HomeFragmentDirections.actionHomeFragmentToSearchIngredientDialogFragment()
+            findNavController().navigate(action)
         }
     }
 }

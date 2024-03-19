@@ -7,8 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.findNavController
 import com.avs.pantrychef.databinding.DialogSearchIngredientBinding
 import com.avs.pantrychef.model.Ingredient
 import com.avs.pantrychef.view.adapters.IngredientAdapter
@@ -54,7 +54,10 @@ class SearchIngredientDialogFragment : BottomSheetDialogFragment() {
         binding.ingredientRecyclerView.adapter = adapter
 
         binding.searchRecipesButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Se presionó el botón de buscar recetas", Toast.LENGTH_SHORT).show()
+            val selectedIngredientsIds = adapter.getSelectedIngredientsList().map { it.id }.toTypedArray()
+
+            val action = SearchIngredientDialogFragmentDirections.actionSearchIngredientDialogFragmentToReceiptListFragment(selectedIngredientsIds)
+            findNavController().navigate(action)
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
