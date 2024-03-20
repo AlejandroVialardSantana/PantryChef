@@ -5,19 +5,14 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.AuthController
-import com.avs.pantrychef.view.fragments.FavsFragment
-import com.avs.pantrychef.view.fragments.HomeFragment
-import com.avs.pantrychef.view.fragments.ShoppingListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 class HomeActivity: AppCompatActivity() {
 
-        private lateinit var authController: AuthController
+    private lateinit var authController: AuthController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

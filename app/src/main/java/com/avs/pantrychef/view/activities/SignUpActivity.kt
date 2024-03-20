@@ -32,11 +32,12 @@ class SignUpActivity: AppCompatActivity() {
 
         registerButton.setOnClickListener {
             val email = findViewById<EditText>(R.id.emailRegisterInput).text.toString()
+            val userName = findViewById<EditText>(R.id.userNameRegisterInput).text.toString()
             val password = findViewById<EditText>(R.id.passwordRegisterInput).text.toString()
             val confirmPassword = findViewById<EditText>(R.id.confirmPasswordInput).text.toString()
 
-            if (validateRegister(email, password, confirmPassword)) {
-                authController.signUp(email, password, ::onRegisterSuccess, ::onRegisterFailure)
+            if (validateRegister(email, userName, password, confirmPassword)) {
+                authController.signUp(email, userName, password, ::onRegisterSuccess, ::onRegisterFailure)
             }
         }
 
@@ -46,7 +47,7 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
-    private fun validateRegister(email: String, password: String, confirmPassword: String): Boolean {
+    private fun validateRegister(email: String, userName: String, password: String, confirmPassword: String): Boolean {
         if (email.isEmpty()) {
             Toast.makeText(this, "El campo de correo electrónico está vacío.", Toast.LENGTH_SHORT).show()
             return false
@@ -57,7 +58,11 @@ class SignUpActivity: AppCompatActivity() {
             Toast.makeText(this, "El campo de contraseña está vacío.", Toast.LENGTH_SHORT).show()
             return false
         } else if (confirmPassword.isEmpty()) {
-            Toast.makeText(this, "El campo de confirmar contraseña está vacío.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "El campo de confirmar contraseña está vacío.", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        } else if (userName.isEmpty()) {
+            Toast.makeText(this, "El campo de nombre de usuario está vacío.", Toast.LENGTH_SHORT).show()
             return false
         } else if (password != confirmPassword) {
             Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show()

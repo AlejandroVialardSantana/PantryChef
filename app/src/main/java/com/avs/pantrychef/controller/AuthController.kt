@@ -2,10 +2,12 @@ package com.avs.pantrychef.controller
 
 import android.content.Context
 import android.util.Log
+import com.avs.pantrychef.model.User
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthController(private val context: Context) {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var userController: UserController = UserController()
 
     fun logIn(email: String, password: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -19,11 +21,20 @@ class AuthController(private val context: Context) {
         }
     }
 
-    fun signUp(email: String, password: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
+    fun signUp(email: String, username: String, password: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d("AuthController", "createUserWithEmail:success")
-                onSuccess()
+
+                val userId = auth.currentUser?.uid ?: ""
+
+                val newUser = User(userId, username, email, listOf())
+
+                userController.createUser(newUser, {
+                    onSuccess()
+                }, {
+                    onFailure()
+                })
             } else {
                 Log.w("AuthController", "createUserWithEmail:failure", task.exception)
                 onFailure()
