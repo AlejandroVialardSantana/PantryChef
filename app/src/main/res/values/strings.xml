@@ -31,4 +31,7 @@
     <string name="addIngredients">Escribe los ingredientes que tengas</string>
     <string name="noResults">No tenemos ese ingrediente</string>
 
+    <!-- Recipe List -->
+    <string name="addFav">Añadir a favoritos</string>
+
 </resources>
