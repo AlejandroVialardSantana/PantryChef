@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="orText">Or</string>
+    <string name="appName">Pantry<b>Chef</b></string>
+    <string name="forgetPasswordText">Forgot your password?</string>
+    <string name="changeText"><u>Change</u></string>
+    <string name="login">Log in</string>
+    <string name="loginGoogle">Log in with Google</string>
+    <string name="register">Create account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm password</string>
+    <string name="textResetPassword">Enter your account email. We will send you instructions to reset your password.</string>
+    <string name="resetPassword">Send</string>
+    <string name="haveAccountText">Already have an account?</string>
+    <string name="loginLink"><u>Log in</u></string>
+    <string name="noAccountText">Dont have an account?</string>
+    <string name="registerLink"><u>Sign up</u></string>
+    <string name="userName">Username</string>
+    <string name="LogOut">Log Out</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="shopping">Shopping</string>
+    <string name="favs">Favorites</string>
+
+    <!-- Home -->
+    <string name="searchText">Tap to add ingredients</string>
+
+    <!-- Ingredients List -->
+    <string name="searchRecipes">Search recipes</string>
+    <string name="addIngredients">Type the ingredients you have</string>
+    <string name="noResults">We dont have that ingredient</string>
+
+    <!-- Recipe List -->
+    <string name="addFav">Add to favorites</string>
+
+</resources>
