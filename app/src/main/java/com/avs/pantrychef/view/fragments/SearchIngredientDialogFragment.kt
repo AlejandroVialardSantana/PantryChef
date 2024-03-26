@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.findNavController
+import com.avs.pantrychef.controller.IngredientController
 import com.avs.pantrychef.databinding.DialogSearchIngredientBinding
 import com.avs.pantrychef.model.Ingredient
 import com.avs.pantrychef.view.adapters.IngredientAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import java.util.Locale
 
 class SearchIngredientDialogFragment : BottomSheetDialogFragment() {
 
@@ -28,52 +30,45 @@ class SearchIngredientDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Aquí configuras tu RecyclerView y el buscador
-        // Configura el adaptador del RecyclerView con un listado hardcodeado de ingredientes
-        val ingredients = listOf(
-            Ingredient("1", "Pimiento rojo", "unidades"),
-            Ingredient("2", "Pimiento verde", "unidades"),
-            Ingredient("3", "Cebolla", "unidades"),
-            Ingredient("4", "Tomate", "unidades"),
-            Ingredient("5", "Ajo", "unidades"),
-            Ingredient("6", "Aceite de oliva", "cucharadas"),
-            Ingredient("7", "Sal", "cucharaditas"),
-            Ingredient("8", "Pimiento morrón", "cucharaditas"),
-            // Agrega más ingredientes
-        )
+        fetchIngredients()
+    }
 
-        Log.d("SearchIngredientDialogFragment", "Ingredientes: $ingredients")
+    private fun fetchIngredients() {
+        val languageCode = Locale.getDefault().language
 
-        val adapter = IngredientAdapter(ingredients).apply {
-            onIngredientSelectionChanged = {
-                updateSelectedIngredients(this)
-            }
-        }
-
-        binding.ingredientRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.ingredientRecyclerView.adapter = adapter
-
-        binding.searchRecipesButton.setOnClickListener {
-            val selectedIngredientsIds = adapter.getSelectedIngredientsList().map { it.id }.toTypedArray()
-
-            val action = SearchIngredientDialogFragmentDirections.actionSearchIngredientDialogFragmentToReceiptListFragment(selectedIngredientsIds)
-            findNavController().navigate(action)
-        }
-
-        binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                adapter.filter.filter(s)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (adapter.filteredIngredients.isEmpty()) {
-                    binding.textViewNoResults.visibility = View.VISIBLE
-                } else {
-                    binding.textViewNoResults.visibility = View.GONE
+        IngredientController().fetchIngredients(languageCode, onSuccess = { ingredients ->
+            val adapter = IngredientAdapter(ingredients).apply {
+                onIngredientSelectionChanged = {
+                    updateSelectedIngredients(this)
                 }
             }
+            binding.ingredientRecyclerView.layoutManager = LinearLayoutManager(context)
+            binding.ingredientRecyclerView.adapter = adapter
+
+            binding.searchRecipesButton.setOnClickListener {
+                val selectedIngredientsIds = adapter.getSelectedIngredientsList().map { it.id }.toTypedArray()
+
+                val action = SearchIngredientDialogFragmentDirections.actionSearchIngredientDialogFragmentToReceiptListFragment(selectedIngredientsIds)
+                findNavController().navigate(action)
+            }
+
+            binding.searchEditText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    adapter.filter.filter(s)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (adapter.filteredIngredients.isEmpty()) {
+                        binding.textViewNoResults.visibility = View.VISIBLE
+                    } else {
+                        binding.textViewNoResults.visibility = View.GONE
+                    }
+                }
+            })
+        }, onFailure = { exception ->
+            Log.e("SearchIngredientDialog", "Error fetching ingredients", exception)
         })
     }
 
