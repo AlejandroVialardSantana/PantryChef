@@ -24,12 +24,15 @@
     </dialog>
     <fragment
         android:id="@+id/receiptListFragment"
-        android:name="com.avs.pantrychef.view.fragments.ReceiptListFragment"
+        android:name="com.avs.pantrychef.view.fragments.RecipeListFragment"
         android:label="ReceiptListFragment"
         tools:layout="@layout/fragment_receipt_list" >
         <argument
             android:name="ingredientIds"
             app:argType="string[]" />
+        <action
+            android:id="@+id/action_receiptListFragment_to_ingredientsListFragment"
+            app:destination="@id/ingredientsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/shoppingListFragment"
@@ -41,4 +44,16 @@
         android:name="com.avs.pantrychef.view.fragments.FavsFragment"
         android:label="FavsFragment"
         tools:layout="@layout/fragment_favs" />
+    <fragment
+        android:id="@+id/ingredientsListFragment"
+        android:name="com.avs.pantrychef.view.fragments.IngredientsListFragment"
+        android:label="IngredientsListFragment"
+        tools:layout="@layout/fragment_ingredients_list" >
+        <argument
+            android:name="receiptId"
+            app:argType="string" />
+        <argument
+            android:name="ingredientsIds"
+            app:argType="string[]" />
+    </fragment>
 </navigation>

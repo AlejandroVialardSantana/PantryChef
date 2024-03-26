@@ -7,18 +7,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.RecipeController
 import com.avs.pantrychef.model.Recipe
 import java.util.Locale
 
-class ReceiptListFragment : Fragment() {
+class RecipeListFragment : Fragment() {
 
-    private val args: ReceiptListFragmentArgs by navArgs()
+    private val args: RecipeListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +45,7 @@ class ReceiptListFragment : Fragment() {
             activity?.runOnUiThread {
                 container.removeAllViews() // Limpiar las recetas anteriores
                 recipes.forEach { recipe ->
-                    addRecipeCardToView(recipe, container)
+                    addRecipeCardToView(recipe, ingredientIds, container)
                 }
             }
         }, onFailure = { exception ->
@@ -53,7 +53,7 @@ class ReceiptListFragment : Fragment() {
         })
     }
 
-    private fun addRecipeCardToView(recipe: Recipe, container: LinearLayout) {
+    private fun addRecipeCardToView(recipe: Recipe, ingredientIds: Array<String>, container: LinearLayout) {
         // Crear una vista de tarjeta para la receta
         val cardView = layoutInflater.inflate(R.layout.card_recipe, container, false)
 
@@ -78,6 +78,12 @@ class ReceiptListFragment : Fragment() {
             setMargins(0, marginInPixels, 0, marginInPixels)
         }
         cardView.layoutParams = layoutParams
+
+        cardView.setOnClickListener {
+            // Navegar a la pantalla de detalles de la receta
+            val action = RecipeListFragmentDirections.actionReceiptListFragmentToIngredientsListFragment(recipe.id, ingredientIds)
+            view?.findNavController()?.navigate(action)
+        }
 
         container.addView(cardView)
     }

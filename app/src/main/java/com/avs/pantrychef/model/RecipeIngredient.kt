@@ -1,7 +1,8 @@
 package com.avs.pantrychef.model
 
 data class RecipeIngredient(
-    val recipeId: String,
-    val ingredientId: String,
-    val quantity: String
+    val id: String = "",
+    val recipeId: String = "",
+    val ingredientId: String = "",
+    val quantity: String = ""
 )
