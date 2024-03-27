@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.model.Ingredient
 
-class IngredientListAdapter(private val ingredients: List<Ingredient>, private val selectedIngredientsIds: List<String>) :
-    RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>() {
+class IngredientListAdapter(
+    private val ingredients: List<Ingredient>,
+    selectedIngredientsIds: List<String>
+) : RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>() {
 
-    var selectedIngredients: MutableList<Ingredient> = mutableListOf()
+    private val _selectedIngredientsIds: MutableList<String> = selectedIngredientsIds.toMutableList()
+    val selectedIngredientsIds: List<String> get() = _selectedIngredientsIds
+    val ingredientsList: List<Ingredient> get() = ingredients
 
     class IngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ingredientName: TextView = view.findViewById(R.id.ingredientName)
@@ -26,20 +30,24 @@ class IngredientListAdapter(private val ingredients: List<Ingredient>, private v
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val ingredient = ingredients[position]
-        holder.ingredientName.text = ingredient.name
-        holder.ingredientCheckbox.isChecked = selectedIngredients.contains(ingredient) || selectedIngredientsIds.contains(ingredient.id) // Marcar si está en la lista previa
 
+        // Quitar temporalmente el listener para evitar triggers indeseados
+        holder.ingredientCheckbox.setOnCheckedChangeListener(null)
+
+        // Establecer estado del CheckBox basado en si el ingrediente está seleccionado
+        holder.ingredientCheckbox.isChecked = selectedIngredientsIds.contains(ingredient.id)
+
+        // Volver a establecer el listener
         holder.ingredientCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            // Añade o elimina el ingrediente de la lista de seleccionados basado en el estado del CheckBox
             if (isChecked) {
-                selectedIngredients.add(ingredient)
+                _selectedIngredientsIds.add(ingredient.id)
             } else {
-                selectedIngredients.remove(ingredient)
+                _selectedIngredientsIds.remove(ingredient.id)
             }
         }
+
+        holder.ingredientName.text = ingredient.name
     }
 
     override fun getItemCount(): Int = ingredients.size
-
-    fun getSelectedIngredientsList(): List<Ingredient> = selectedIngredients
 }
