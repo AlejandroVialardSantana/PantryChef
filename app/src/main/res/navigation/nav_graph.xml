@@ -50,10 +50,22 @@
         android:label="IngredientsListFragment"
         tools:layout="@layout/fragment_ingredients_list" >
         <argument
-            android:name="receiptId"
+            android:name="recipeId"
             app:argType="string" />
         <argument
             android:name="ingredientsIds"
             app:argType="string[]" />
+        <action
+            android:id="@+id/action_ingredientsListFragment_to_recipeStepFragment"
+            app:destination="@id/recipeStepFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeStepFragment"
+        android:name="com.avs.pantrychef.view.fragments.RecipeStepFragment"
+        android:label="RecipeStepFragment"
+        tools:layout="@layout/fragment_recipe_step" >
+        <argument
+            android:name="recipeId"
+            app:argType="string" />
     </fragment>
 </navigation>

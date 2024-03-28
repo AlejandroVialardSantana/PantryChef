@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,7 @@ class IngredientsListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val languageCode = Locale.getDefault().language
-        val recipeId = args.receiptId
+        val recipeId = args.recipeId
         val ingredientsIds = args.ingredientsIds.toList()
 
         recipeController.getRecipeWithIngredientsById(
@@ -79,6 +80,11 @@ class IngredientsListFragment: Fragment() {
             if (fileUri != null) {
                 shareShoppingListFile(fileUri, requireContext())
             }
+        }
+
+        view.findViewById<Button>(R.id.btnStartCooking).setOnClickListener {
+            val action = IngredientsListFragmentDirections.actionIngredientsListFragmentToRecipeStepFragment(recipeId)
+            view?.findNavController()?.navigate(action)
         }
     }
 
