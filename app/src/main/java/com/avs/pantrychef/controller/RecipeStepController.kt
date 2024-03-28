@@ -8,7 +8,6 @@ class RecipeStepController {
     private val db = FirebaseFirestore.getInstance()
 
     fun fetchStepsByRecipeId(recipeId: String, languageCode: String, onSuccess: (List<Step>) -> Unit, onFailure: (Exception) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
         db.collection("recipe_steps")
             .whereEqualTo("recipeId", recipeId)
             .orderBy("order")

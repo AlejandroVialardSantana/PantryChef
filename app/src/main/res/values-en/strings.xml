@@ -35,5 +35,7 @@
 
     <!-- Recipe List -->
     <string name="addFav">Add to favorites</string>
+    <string name="channelName">PantryChef</string>
+    <string name="channelDescription">El tiempo ha terminado.</string>
 
 </resources>
