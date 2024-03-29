@@ -67,5 +67,11 @@
         <argument
             android:name="recipeId"
             app:argType="string" />
+        <argument
+            android:name="stepIndex"
+            app:argType="integer" />
     </fragment>
+    <action
+        android:id="@+id/action_global_recipeStepFragment"
+        app:destination="@id/recipeStepFragment" />
 </navigation>

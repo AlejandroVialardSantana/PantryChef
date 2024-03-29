@@ -14,6 +14,8 @@ import java.util.Locale
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
+import android.util.Log
+import com.avs.pantrychef.view.fragments.IngredientsListFragmentDirections
 
 class HomeActivity: AppCompatActivity() {
 
@@ -34,6 +36,9 @@ class HomeActivity: AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         setupUserIconMenu()
+
+        // Manejar el intent que se recibe al abrir la actividad
+        handleIntent(intent)
     }
 
     override fun attachBaseContext(newBase: Context?) {
@@ -125,5 +130,29 @@ class HomeActivity: AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("HomeActivity", "onNewIntent: Received new intent")
+        setIntent(intent)
+        handleIntent(intent)
+    }
 
+    // TODO: Revisar el porqué no se está recibiendo el intent
+    private fun handleIntent(intent: Intent?) {
+        intent?.let {
+            val recipeId = it.getStringExtra("notificationRecipeId") ?: ""
+            val stepIndex = it.getIntExtra("notificationStepIndex", -1)
+            Log.d("HomeActivity", "Handling intent - Recipe ID: $recipeId, Step Index: $stepIndex")
+            if (recipeId.isNotEmpty() && stepIndex != -1) {
+                val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment?
+                val navController = navHostFragment?.navController
+
+                val bundle = Bundle().apply {
+                    putString("recipeId", recipeId)
+                    putInt("stepIndex", stepIndex)
+                }
+                navController?.navigate(R.id.action_global_recipeStepFragment, bundle)
+            }
+        }
+    }
 }

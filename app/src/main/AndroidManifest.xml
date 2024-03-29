@@ -36,11 +36,14 @@
 
         <activity
             android:name=".view.activities.HomeActivity"
+            android:launchMode="singleTop"
             android:exported="true" />
 
         <activity
             android:name=".view.activities.ResetPasswordActivity"
             android:exported="true" />
+
+        <service android:name=".services.TimerService" />
 
         <!-- Provider para exportar archivos -->
         <provider

@@ -83,7 +83,7 @@ class IngredientsListFragment: Fragment() {
         }
 
         view.findViewById<Button>(R.id.btnStartCooking).setOnClickListener {
-            val action = IngredientsListFragmentDirections.actionIngredientsListFragmentToRecipeStepFragment(recipeId)
+            val action = IngredientsListFragmentDirections.actionIngredientsListFragmentToRecipeStepFragment(recipeId, 0)
             view?.findNavController()?.navigate(action)
         }
     }

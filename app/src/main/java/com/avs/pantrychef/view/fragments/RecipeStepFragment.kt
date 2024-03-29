@@ -3,7 +3,10 @@ package com.avs.pantrychef.view.fragments
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +27,7 @@ import androidx.navigation.fragment.navArgs
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.RecipeStepController
 import com.avs.pantrychef.model.Step
+import com.avs.pantrychef.services.TimerService
 import java.util.Locale
 
 class RecipeStepFragment: Fragment() {
@@ -32,7 +36,6 @@ class RecipeStepFragment: Fragment() {
     private val recipeStepController = RecipeStepController()
     private var currentStepIndex = 0
     private var steps = listOf<Step>()
-    private var countDownTimer: CountDownTimer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +49,9 @@ class RecipeStepFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recipeId = args.recipeId
+        currentStepIndex = args.stepIndex
         val languageCode = Locale.getDefault().language
+        Log.d("RecipeStepFragment", "Recipe ID: $recipeId, Step Index: $currentStepIndex")
 
         recipeStepController.fetchStepsByRecipeId(
             recipeId,
@@ -75,62 +80,47 @@ class RecipeStepFragment: Fragment() {
         }
     }
 
-    private fun setupTimerButton(timeInSeconds: Int) {
+    override fun onStart() {
+        super.onStart()
+        val filter = IntentFilter().apply {
+            addAction("timer_update")
+            addAction("timer_finished")
+        }
+        context?.registerReceiver(timerUpdateReceiver, filter)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        context?.unregisterReceiver(timerUpdateReceiver)
+    }
+
+    private val timerUpdateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                "timer_update" -> {
+                    val millisUntilFinished = intent.getLongExtra("countdown", 0)
+                    val minutes = millisUntilFinished / 1000 / 60
+                    val seconds = millisUntilFinished / 1000 % 60
+                    view?.findViewById<TextView>(R.id.btnSetTimer)?.text = String.format("%02d:%02d", minutes, seconds)
+                    Log.d("RecipeStepFragment", "Timer update: $minutes:$seconds")
+                }
+                "timer_finished" -> {
+                    view?.findViewById<TextView>(R.id.btnSetTimer)?.text = "Poner cronómetro"
+                    view?.findViewById<Button>(R.id.btnSetTimer)?.isEnabled = true
+                }
+            }
+        }
+    }
+
+    private fun setupTimerButton(timeInMinutes: Int) {
         val btnSetTimer: Button = requireView().findViewById(R.id.btnSetTimer)
         btnSetTimer.setOnClickListener {
-            startTimer(timeInSeconds)
-        }
-    }
-
-    private fun startTimer(timeInMinutes: Int) {
-        countDownTimer?.cancel() // Cancelar cualquier timer existente
-        countDownTimer = object : CountDownTimer(timeInMinutes * 60 * 1000L, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                // Actualiza el texto del botón con el tiempo restante
-                val minutesLeft = millisUntilFinished / 1000 / 60
-                val secondsLeft = (millisUntilFinished / 1000) % 60
-                val btnSetTimer: Button = requireView().findViewById(R.id.btnSetTimer)
-                btnSetTimer.text = String.format("Tiempo restante: %d:%02d", minutesLeft, secondsLeft)
-            }
-
-            override fun onFinish() {
-                // Notifica al usuario que el tiempo ha terminado
-                // checkNotificationPermissionAndShow()
-                notifyUserTimeIsUp()
-            }
-        }.start()
-    }
-
-    private fun notifyUserTimeIsUp() {
-        createNotificationChannel()
-        val notificationBuilder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_timer)
-            .setContentTitle("PantryChef")
-            .setContentText("¡Tu tiempo de cocción ha terminado!")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-
-        with(NotificationManagerCompat.from(requireContext())) {
-            notify(NOTIFICATION_ID, notificationBuilder.build())
-        }
-    }
-
-    companion object {
-        const val NOTIFICATION_ID = 1
-        const val CHANNEL_ID = "timer_channel"
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channelName)
-            val descriptionText = getString(R.string.channelDescription)
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            Log.d("RecipeStepFragment", "Setting timer for $timeInMinutes minutes")
+            val intent = Intent(context, TimerService::class.java)
+            intent.putExtra("timeInMinutes", timeInMinutes)
+            intent.putExtra("recipeId", args.recipeId)
+            intent.putExtra("stepIndex", currentStepIndex)
+            context?.startService(intent)
         }
     }
 
@@ -146,10 +136,5 @@ class RecipeStepFragment: Fragment() {
         } else {
             view?.findViewById<Button>(R.id.btnSetTimer)?.visibility = View.INVISIBLE
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        countDownTimer?.cancel()
     }
 }
