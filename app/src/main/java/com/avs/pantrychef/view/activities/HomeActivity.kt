@@ -15,6 +15,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
+import androidx.navigation.ui.onNavDestinationSelected
 import com.avs.pantrychef.view.fragments.IngredientsListFragmentDirections
 
 class HomeActivity: AppCompatActivity() {
@@ -33,7 +34,18 @@ class HomeActivity: AppCompatActivity() {
         val navController = navHostFragment.navController
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigation)
-        bottomNavigationView.setupWithNavController(navController)
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
+                    navController.navigate(R.id.homeFragment)
+                    true
+                }
+                else -> {
+                    item.onNavDestinationSelected(navController)
+                }
+            }
+        }
 
         setupUserIconMenu()
 
