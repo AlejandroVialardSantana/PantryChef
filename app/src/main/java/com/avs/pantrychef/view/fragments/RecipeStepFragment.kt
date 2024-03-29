@@ -1,16 +1,11 @@
 package com.avs.pantrychef.view.fragments
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +13,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.avs.pantrychef.R
@@ -36,6 +27,7 @@ class RecipeStepFragment: Fragment() {
     private val recipeStepController = RecipeStepController()
     private var currentStepIndex = 0
     private var steps = listOf<Step>()
+    private lateinit var textToSpeech: TextToSpeech
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +39,8 @@ class RecipeStepFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupTextToSpeech()
 
         val recipeId = args.recipeId
         currentStepIndex = args.stepIndex
@@ -77,6 +71,10 @@ class RecipeStepFragment: Fragment() {
                 currentStepIndex--
                 displayStep(currentStepIndex)
             }
+        }
+
+        view.findViewById<ImageView>(R.id.mic).setOnClickListener() {
+            readCurrentStep()
         }
     }
 
@@ -137,4 +135,32 @@ class RecipeStepFragment: Fragment() {
             view?.findViewById<Button>(R.id.btnSetTimer)?.visibility = View.INVISIBLE
         }
     }
+
+    private fun setupTextToSpeech() {
+        textToSpeech = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech.setLanguage(Locale.getDefault())
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("RecipeStepFragment", "This Language is not supported")
+                }
+            } else {
+                Log.e("RecipeStepFragment", "Initialization Failed!")
+            }
+        }
+    }
+
+    private fun readCurrentStep() {
+        steps.getOrNull(currentStepIndex)?.let { step ->
+            textToSpeech.speak(step.description, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+
+    override fun onDestroy() {
+        if (::textToSpeech.isInitialized) {
+            textToSpeech.stop()
+            textToSpeech.shutdown()
+        }
+        super.onDestroy()
+    }
+
 }
