@@ -26,7 +26,7 @@
         android:id="@+id/receiptListFragment"
         android:name="com.avs.pantrychef.view.fragments.RecipeListFragment"
         android:label="ReceiptListFragment"
-        tools:layout="@layout/fragment_receipt_list" >
+        tools:layout="@layout/fragment_recipe_list" >
         <argument
             android:name="ingredientIds"
             app:argType="string[]" />
