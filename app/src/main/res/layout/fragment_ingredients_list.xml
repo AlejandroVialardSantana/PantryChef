@@ -19,7 +19,7 @@
         android:id="@+id/tvRecipeTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Tiempo aprox: 20 min"
+        android:text="@string/timeAprox"
         app:layout_constraintTop_toBottomOf="@id/tvRecipeName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -28,7 +28,7 @@
         android:id="@+id/tvRecipeDifficulty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Dificultad: Fácil"
+        android:text="@string/difficulty"
         app:layout_constraintTop_toBottomOf="@id/tvRecipeTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_medium"
-        android:text="Ingredients:"
+        android:text="@string/ingredients"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -58,10 +58,10 @@
 
     <Button
         android:id="@+id/btnMakeShoppingList"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="224dp"
+        android:layout_height="54dp"
         android:backgroundTint="@color/buttonColor"
-        android:text="Hacer lista de compra"
+        android:text="@string/shoppingListBtnText"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/btnStartCooking"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,10 +69,10 @@
 
     <Button
         android:id="@+id/btnStartCooking"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="224dp"
+        android:layout_height="54dp"
         android:backgroundTint="@color/buttonColor"
-        android:text="Comenzar"
+        android:text="@string/startCookingBtnText"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

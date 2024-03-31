@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.avs.pantrychef.R
 
 class HomeFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -55,9 +55,9 @@ class IngredientsListFragment: Fragment() {
                     // Actualizar la UI con los detalles de la receta
                     view.findViewById<TextView>(R.id.tvRecipeName).text = recipe.title
                     view.findViewById<TextView>(R.id.tvRecipeTime).text =
-                        "Tiempo aprox: ${recipe.preparationTime} min"
+                        getString(R.string.timeAprox, recipe.preparationTime)
                     view.findViewById<TextView>(R.id.tvRecipeDifficulty).text =
-                        "Dificultad: ${recipe.difficulty}"
+                        getString(R.string.difficulty, recipe.difficulty)
 
                     // Configurar el RecyclerView con los ingredientes
                     setupRecyclerView(ingredients, ingredientsIds)

@@ -6,6 +6,7 @@
     android:background="@drawable/recipe_card_background"
     android:orientation="horizontal"
     android:padding="16dp"
+    android:layout_marginBottom="8dp"
     android:gravity="center_vertical">
 
     <ImageView
@@ -35,13 +36,13 @@
             android:id="@+id/recipeTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tiempo aprox: 20 min" />
+            android:text="@string/timeAprox" />
 
         <TextView
             android:id="@+id/recipeDifficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dificultad: Fácil" />
+            android:text="@string/difficulty" />
     </LinearLayout>
 
     <LinearLayout

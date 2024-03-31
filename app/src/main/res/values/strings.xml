@@ -38,4 +38,27 @@
     <string name="channelName">PantryChef</string>
     <string name="channelDescription">El tiempo ha terminado.</string>
 
+    <!-- Recipe Step -->
+    <string name="setTimer">Poner cronómetro</string>
+    <string name="previousStep">Paso anterior</string>
+    <string name="mic">Micrófono</string>
+    <string name="nextStep">Siguiente paso</string>
+    <string name="finish">Terminar</string>
+    <string name="stepTitle">Paso %1$d</string>
+    <string name="stepDescription">Lorem ipsum dolor sit amet...</string>
+
+    <!-- Recipe Favorites -->
+    <string name="noFavs">No tienes recetas favoritas</string>
+    <string name="favsTitle">Recetas favoritas</string>
+
+    <!-- Recipe Details -->
+    <string name="recipeDetails">Detalles de la receta</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="timeAprox">Tiempo aproximado: %1$d min</string>
+    <string name="difficulty">Dificultad: %1$s</string>
+
+    <!-- Recipe Ingredients List -->
+    <string name="shoppingListBtnText">Hacer lista de la compra</string>
+    <string name="startCookingBtnText">Comenzar</string>
+
 </resources>

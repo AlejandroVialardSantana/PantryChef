@@ -124,7 +124,8 @@ class RecipeStepFragment: Fragment() {
 
     private fun displayStep(index: Int) {
         val step = steps[index]
-        view?.findViewById<TextView>(R.id.stepTitle)?.text = "Paso ${step.order}:"
+        val stepTitle = getString(R.string.stepTitle, step.order)
+        view?.findViewById<TextView>(R.id.stepTitle)?.text = stepTitle
         view?.findViewById<TextView>(R.id.stepDescription)?.text = step.description
 
         // Si el paso tiene tiempo, configurar y mostrar el botón del cronómetro

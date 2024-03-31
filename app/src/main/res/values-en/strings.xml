@@ -36,6 +36,29 @@
     <!-- Recipe List -->
     <string name="addFav">Add to favorites</string>
     <string name="channelName">PantryChef</string>
-    <string name="channelDescription">El tiempo ha terminado.</string>
+    <string name="channelDescription">Time is finished.</string>
+
+    <!-- Recipe Step -->
+    <string name="setTimer">Set timer</string>
+    <string name="previousStep">Previous step</string>
+    <string name="mic">Mic</string>
+    <string name="nextStep">Next step</string>
+    <string name="finish">Finish</string>
+    <string name="stepTitle">Step %1$d</string>
+    <string name="stepDescription">Lorem ipsum dolor sit amet...</string>
+
+    <!-- Recipe Favorites -->
+    <string name="noFavs">You dont have favorite recipes</string>
+    <string name="favsTitle">Favorite recipes</string>
+
+    <!-- Recipe Details -->
+    <string name="recipeDetails">Recipe details</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="timeAprox">Approximate time: %1$d min</string>
+    <string name="difficulty">Difficulty: %1$s</string>
+
+    <!-- Recipe Ingredients List -->
+    <string name="shoppingListBtnText">Make shopping list</string>
+    <string name="startCookingBtnText">Start cooking</string>
 
 </resources>

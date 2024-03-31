@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_medium"
-        android:text="Recetas favoritas"
+        android:text="@string/favsTitle"
         android:textAlignment="viewEnd"
         android:textColor="@color/black"
         android:textSize="24sp"

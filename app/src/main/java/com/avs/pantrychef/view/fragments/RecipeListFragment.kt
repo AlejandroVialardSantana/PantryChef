@@ -78,8 +78,8 @@ class RecipeListFragment : Fragment() {
 
         // Configurar los valores de los componentes de la vista
         recipeName.text = recipe.title
-        recipeTime.text = "Tiempo aprox: ${recipe.preparationTime} min"
-        recipeDifficulty.text = "Dificultad: ${recipe.difficulty}"
+        recipeTime.text = getString(R.string.timeAprox, recipe.preparationTime)
+        recipeDifficulty.text = getString(R.string.difficulty, recipe.difficulty)
 
         // Configurar los márgenes para la vista
         val layoutParams = LinearLayout.LayoutParams(
