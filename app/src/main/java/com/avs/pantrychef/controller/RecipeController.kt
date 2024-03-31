@@ -30,7 +30,7 @@ class RecipeController {
             }
     }
 
-    private fun fetchRecipesByIds(recipeIds: List<String?>, languageCode: String, onSuccess: (List<Recipe>) -> Unit, onFailure: (Exception) -> Unit) {
+    fun fetchRecipesByIds(recipeIds: List<String?>, languageCode: String, onSuccess: (List<Recipe>) -> Unit, onFailure: (Exception) -> Unit) {
         if (recipeIds.isEmpty()) {
             onSuccess(emptyList())
             return
