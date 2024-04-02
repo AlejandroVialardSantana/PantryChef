@@ -35,8 +35,6 @@
 
     <!-- Recipe List -->
     <string name="addFav">Add to favorites</string>
-    <string name="channelName">PantryChef</string>
-    <string name="channelDescription">Time is finished.</string>
 
     <!-- Recipe Step -->
     <string name="setTimer">Set timer</string>
@@ -60,5 +58,11 @@
     <!-- Recipe Ingredients List -->
     <string name="shoppingListBtnText">Make shopping list</string>
     <string name="startCookingBtnText">Start cooking</string>
+
+    <!-- Timer -->
+    <string name="timerRunning">Timer running</string>
+    <string name="timerNotificationText">Your timer is running. Tap for more details.</string>
+    <string name="channelName">PantryChef</string>
+    <string name="channelDescription">Time is finished.</string>
 
 </resources>

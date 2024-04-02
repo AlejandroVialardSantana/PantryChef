@@ -156,8 +156,8 @@ class HomeActivity: AppCompatActivity() {
             val stepIndex = it.getIntExtra("notificationStepIndex", -1)
             Log.d("HomeActivity", "Handling intent - Recipe ID: $recipeId, Step Index: $stepIndex")
             if (recipeId.isNotEmpty() && stepIndex != -1) {
-                val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment?
-                val navController = navHostFragment?.navController
+                val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+                val navController = navHostFragment.navController
 
                 val bundle = Bundle().apply {
                     putString("recipeId", recipeId)

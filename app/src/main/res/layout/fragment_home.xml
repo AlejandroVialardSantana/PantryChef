@@ -23,10 +23,10 @@
 
         <ImageView
             android:id="@+id/iconInsideLogo"
-            android:layout_width="134dp"
-            android:layout_height="125dp"
+            android:layout_width="142dp"
+            android:layout_height="134dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_search"
+            android:src="@drawable/pantrychef_logo_icon"
             app:tint="@color/backgroundColor" />
     </FrameLayout>
 

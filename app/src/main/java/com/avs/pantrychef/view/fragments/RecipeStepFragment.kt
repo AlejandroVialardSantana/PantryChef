@@ -27,6 +27,7 @@ class RecipeStepFragment: Fragment() {
     private val recipeStepController = RecipeStepController()
     private var currentStepIndex = 0
     private var steps = listOf<Step>()
+    private var isTimerRunning = false
     private lateinit var textToSpeech: TextToSpeech
 
     override fun onCreateView(
@@ -105,6 +106,8 @@ class RecipeStepFragment: Fragment() {
                 "timer_finished" -> {
                     view?.findViewById<TextView>(R.id.btnSetTimer)?.text = "Poner cronómetro"
                     view?.findViewById<Button>(R.id.btnSetTimer)?.isEnabled = true
+                    isTimerRunning = false
+                    updateStepNavigationButtons()
                 }
             }
         }
@@ -114,6 +117,8 @@ class RecipeStepFragment: Fragment() {
         val btnSetTimer: Button = requireView().findViewById(R.id.btnSetTimer)
         btnSetTimer.setOnClickListener {
             Log.d("RecipeStepFragment", "Setting timer for $timeInMinutes minutes")
+            isTimerRunning = true
+            updateStepNavigationButtons()
             val intent = Intent(context, TimerService::class.java)
             intent.putExtra("timeInMinutes", timeInMinutes)
             intent.putExtra("recipeId", args.recipeId)
@@ -135,6 +140,8 @@ class RecipeStepFragment: Fragment() {
         } else {
             view?.findViewById<Button>(R.id.btnSetTimer)?.visibility = View.INVISIBLE
         }
+
+        updateStepNavigationButtons()
     }
 
     private fun setupTextToSpeech() {
@@ -154,6 +161,15 @@ class RecipeStepFragment: Fragment() {
         steps.getOrNull(currentStepIndex)?.let { step ->
             textToSpeech.speak(step.description, TextToSpeech.QUEUE_FLUSH, null, null)
         }
+    }
+
+    private fun updateStepNavigationButtons() {
+        val nextStepButton: ImageView = requireView().findViewById(R.id.nextStep)
+        val previousStepButton: ImageView = requireView().findViewById(R.id.previousStep)
+
+        val enableButtons = !isTimerRunning
+        nextStepButton.isEnabled = enableButtons && currentStepIndex < steps.size - 1
+        previousStepButton.isEnabled = enableButtons && currentStepIndex > 0
     }
 
     override fun onDestroy() {

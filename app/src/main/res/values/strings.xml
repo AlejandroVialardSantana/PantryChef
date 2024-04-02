@@ -61,4 +61,8 @@
     <string name="shoppingListBtnText">Hacer lista de la compra</string>
     <string name="startCookingBtnText">Comenzar</string>
 
+    <!-- Timer -->
+    <string name="timerRunning">Temporizador en Ejecución</string>
+    <string name="timerNotificationText">Tu tiempo de cocción está corriendo. Toca para más detalles.</string>
+
 </resources>

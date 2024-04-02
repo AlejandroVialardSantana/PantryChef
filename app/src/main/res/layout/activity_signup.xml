@@ -31,6 +31,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.046" />
 
+    <ImageView
+        android:id="@+id/iconoPantryChef"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
+        android:src="@drawable/pantrychef_logo_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
