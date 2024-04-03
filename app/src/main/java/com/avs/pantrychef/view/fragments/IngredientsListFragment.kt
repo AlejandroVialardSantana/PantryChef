@@ -129,7 +129,7 @@ class IngredientsListFragment: Fragment() {
     }
 
     // Intent para compartir el archivo de la lista de compras y poder enviarlo por correo, WhatsApp, Notas, etc.
-    fun shareShoppingListFile(fileUri: Uri, context: Context) {
+    private fun shareShoppingListFile(fileUri: Uri, context: Context) {
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_STREAM, fileUri)

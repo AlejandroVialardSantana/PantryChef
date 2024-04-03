@@ -159,5 +159,22 @@ class RecipeController {
         }, onFailure)
     }
 
+    fun getRecipeQuantity(recipeId: String, ingredientId: String, onSuccess: (Int) -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("recipe_ingredients")
+            .whereEqualTo("recipeId", recipeId)
+            .whereEqualTo("ingredientId", ingredientId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    onSuccess(0)
+                } else {
+                    val recipeIngredient = querySnapshot.documents.first().toObject(RecipeIngredient::class.java)
+                    onSuccess(recipeIngredient?.quantity?.toInt() ?: 0)
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
 
 }
