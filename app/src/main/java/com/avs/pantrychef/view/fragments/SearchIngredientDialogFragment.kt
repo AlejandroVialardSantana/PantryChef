@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.findNavController
 import com.avs.pantrychef.controller.IngredientController
 import com.avs.pantrychef.databinding.DialogSearchIngredientBinding
-import com.avs.pantrychef.model.Ingredient
-import com.avs.pantrychef.view.adapters.IngredientAdapter
+import com.avs.pantrychef.view.adapters.IngredientDialogAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import java.util.Locale
 
+/**
+ * Fragmento que muestra un diálogo con la lista de ingredientes para seleccionar
+ * y buscar recetas con esos ingredientes.
+ */
 class SearchIngredientDialogFragment : BottomSheetDialogFragment() {
 
     private var _binding: DialogSearchIngredientBinding? = null
@@ -33,11 +36,15 @@ class SearchIngredientDialogFragment : BottomSheetDialogFragment() {
         fetchIngredients()
     }
 
+    /**
+     * Obtiene la lista de ingredientes desde la API y configura el RecyclerView.
+     * También configura el botón de búsqueda de recetas.
+     */
     private fun fetchIngredients() {
         val languageCode = Locale.getDefault().language
 
         IngredientController().fetchIngredients(languageCode, onSuccess = { ingredients ->
-            val adapter = IngredientAdapter(ingredients).apply {
+            val adapter = IngredientDialogAdapter(ingredients).apply {
                 onIngredientSelectionChanged = {
                     updateSelectedIngredients(this)
                 }
@@ -72,12 +79,21 @@ class SearchIngredientDialogFragment : BottomSheetDialogFragment() {
         })
     }
 
+    /**
+     * Limpia la referencia al binding para evitar memory leaks.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    private fun updateSelectedIngredients(adapter: IngredientAdapter) {
+    /**
+     * Actualiza la lista de ingredientes seleccionados en la vista.
+     * Los muestra con un Chip en el ChipGroup.
+     *
+     * @param adapter Adaptador del RecyclerView
+     */
+    private fun updateSelectedIngredients(adapter: IngredientDialogAdapter) {
         binding.chipGroupSelectedIngredients.removeAllViews()
         adapter.getSelectedIngredientsList().forEach { ingredient ->
             val chip = Chip(context).apply {

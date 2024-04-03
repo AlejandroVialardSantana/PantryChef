@@ -41,6 +41,11 @@ class FavsFragment : Fragment() {
         loadFavoriteRecipes(languageCode)
     }
 
+    /**
+     * Cargar las recetas favoritas del usuario
+     *
+     * @param languageCode Código de idioma para las recetas
+     */
     private fun loadFavoriteRecipes(languageCode: String) {
 
         userController.getFavoriteRecipes(onSuccess = { favoriteRecipes ->
@@ -56,6 +61,12 @@ class FavsFragment : Fragment() {
         })
     }
 
+    /**
+     * Configurar el RecyclerView con las recetas favoritas.
+     * Permitir eliminar recetas de la lista de favoritos.
+     *
+     * @param recipes Lista de recetas favoritas
+     */
     private fun setupRecyclerView(recipes: List<Recipe>) {
         recipeAdapter = RecipeAdapter(recipes.toMutableList(), onFavoriteSelected = { recipe ->
             userController.removeRecipeFromFavorites(recipe.id, onSuccess = {

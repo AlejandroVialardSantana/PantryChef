@@ -19,12 +19,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.RecipeController
 import com.avs.pantrychef.model.Ingredient
-import com.avs.pantrychef.view.adapters.IngredientAdapter
 import com.avs.pantrychef.view.adapters.IngredientListAdapter
 import java.io.File
 import java.io.IOException
 import java.util.Locale
 
+/**
+ * Fragmento para mostrar la lista de ingredientes de una receta y los datos de esta.
+ * Permite al usuario marcar los ingredientes que ya tiene y generar una lista de compras.
+ */
 class IngredientsListFragment: Fragment() {
 
     private val args: IngredientsListFragmentArgs by navArgs()
@@ -39,6 +42,10 @@ class IngredientsListFragment: Fragment() {
         return inflater.inflate(R.layout.fragment_ingredients_list, container, false)
     }
 
+    /**
+     * Carga los datos de la receta y los ingredientes, y configura la UI.
+     * Además, configura los botones para generar la lista de compras y comenzar la receta.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,7 +75,6 @@ class IngredientsListFragment: Fragment() {
             })
 
         view.findViewById<Button>(R.id.btnMakeShoppingList).setOnClickListener {
-            // TODO: Implementar lógica para hacer la lista de compra
             val selectedIngredients = ingredientsAdapter.ingredientsList
             val selectedIngredientsIds = ingredientsAdapter.selectedIngredientsIds
 
@@ -102,6 +108,10 @@ class IngredientsListFragment: Fragment() {
         recyclerView.adapter = ingredientsAdapter
     }
 
+    /**
+     * Crea un archivo de texto con la lista de compra y lo guarda en el directorio de archivos de la app.
+     * Retorna la URI del archivo creado.
+     */
     private fun createShoppingListFile(
         ingredients: List<Ingredient>,
         userIngredientsIds: List<String>,
@@ -128,7 +138,9 @@ class IngredientsListFragment: Fragment() {
         }
     }
 
-    // Intent para compartir el archivo de la lista de compras y poder enviarlo por correo, WhatsApp, Notas, etc.
+    /**
+     * Comparte el archivo de la lista de compras con otras apps.
+     */
     private fun shareShoppingListFile(fileUri: Uri, context: Context) {
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND

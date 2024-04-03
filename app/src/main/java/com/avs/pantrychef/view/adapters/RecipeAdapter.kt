@@ -9,6 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.model.Recipe
 
+/**
+ * Adapter para la lista de recetas favoritas.
+ * Muestra el nombre, tiempo de preparación y dificultad de cada receta.
+ * Además, muestra un ícono de favorito que permite marcar o desmarcar la receta como favorita.
+ *
+ * @param recipes Lista de recetas a mostrar.
+ * @param onFavoriteSelected Función a ejecutar cuando se selecciona un favorito.
+ */
 class RecipeAdapter(private val recipes: MutableList<Recipe>,
                     private val onFavoriteSelected: (Recipe) -> Unit) :
     RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
@@ -27,6 +35,11 @@ class RecipeAdapter(private val recipes: MutableList<Recipe>,
         return RecipeViewHolder(view)
     }
 
+    /**
+     * Establece la función a ejecutar cuando se selecciona una receta.
+     *
+     * @param onRecipeSelected Función a ejecutar.
+     */
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = recipes[position]
         holder.recipeName.text = recipe.title
@@ -48,6 +61,11 @@ class RecipeAdapter(private val recipes: MutableList<Recipe>,
 
     override fun getItemCount(): Int = recipes.size
 
+    /**
+     * Función para eliminar una receta de la lista.
+     *
+     * @param recipe Receta a eliminar.
+     */
     fun removeRecipe(recipe: Recipe) {
         val index = recipes.indexOfFirst { it.id == recipe.id }
         if (index != -1) {

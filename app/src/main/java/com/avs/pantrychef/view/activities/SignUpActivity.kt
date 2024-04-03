@@ -12,15 +12,27 @@ import androidx.appcompat.app.AppCompatActivity
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.AuthController
 
+/**
+ * Actividad para registrar un nuevo usuario.
+ *
+ * @property authController Controlador de autenticación.
+ */
 class SignUpActivity: AppCompatActivity() {
 
     private lateinit var authController: AuthController
 
+    /**
+     * Función que se ejecuta al crear la actividad.
+     *
+     * Se encarga de inicializar los elementos de la vista y de asignar los listeners a los botones
+     * para realizar la acción de registro de un nuevo usuario.
+     * O también para redirigir al usuario a la pantalla de inicio de sesión si presiona el enlace.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        authController = AuthController(this)
+        authController = AuthController()
 
         val backIcon: ImageView = findViewById(R.id.backIcon)
         val registerButton: Button = findViewById(R.id.registerPageButton)
@@ -47,6 +59,17 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
+    /**
+     * Función que valida los campos introducidos por el usuario al registrarse.
+     * Comprueba si los campos de correo electrónico, nombre de usuario, contraseña y confirmar contraseña
+     * están vacíos, si el formato del correo electrónico es correcto y si las contraseñas coinciden.
+     *
+     * @param email Correo electrónico introducido por el usuario.
+     * @param userName Nombre de usuario introducido por el usuario.
+     * @param password Contraseña introducida por el usuario.
+     * @param confirmPassword Confirmación de la contraseña introducida por el usuario.
+     * @return Booleano que indica si los campos son válidos o no.
+     */
     private fun validateRegister(email: String, userName: String, password: String, confirmPassword: String): Boolean {
         if (email.isEmpty()) {
             Toast.makeText(this, "El campo de correo electrónico está vacío.", Toast.LENGTH_SHORT).show()
@@ -71,6 +94,10 @@ class SignUpActivity: AppCompatActivity() {
         return true
     }
 
+    /**
+     * Función que se ejecuta cuando se ha registrado un nuevo usuario.
+     * Muestra un mensaje de éxito y redirige al usuario a la pantalla home de la aplicación.
+     */
     private fun onRegisterSuccess() {
         Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
 
@@ -81,6 +108,10 @@ class SignUpActivity: AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Función que se ejecuta cuando no se ha podido registrar un nuevo usuario.
+     * Muestra un mensaje de error.
+     */
     private fun onRegisterFailure() {
         Toast.makeText(this, "Registro fallido", Toast.LENGTH_SHORT).show()
     }

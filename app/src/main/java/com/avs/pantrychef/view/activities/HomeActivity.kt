@@ -18,16 +18,26 @@ import android.util.Log
 import androidx.navigation.ui.onNavDestinationSelected
 import com.avs.pantrychef.view.fragments.IngredientsListFragmentDirections
 
+/**
+ * Actividad principal de la aplicación cuando el usuario ha iniciado sesión
+ *
+ * @property authController Controlador de autenticación
+ */
 class HomeActivity: AppCompatActivity() {
 
     private lateinit var authController: AuthController
 
+    /**
+     * Método que se ejecuta al crear la actividad, se encarga de inicializar los componentes de la interfaz y manejar la navegación
+     *
+     * @param savedInstanceState Bundle?
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_home)
 
-        authController = AuthController(this)
+        authController = AuthController()
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
 
@@ -53,6 +63,11 @@ class HomeActivity: AppCompatActivity() {
         handleIntent(intent)
     }
 
+    /**
+     * Método que permite insertar un nuevo contexto antes de que la actividad sea creada
+     *
+     * @param newBase Context?
+     */
     override fun attachBaseContext(newBase: Context?) {
         val sharedPref = newBase?.getSharedPreferences("PantryChef", Context.MODE_PRIVATE)
         val languageCode = sharedPref?.getString("language", Locale.getDefault().language) ?: Locale.getDefault().language
@@ -61,6 +76,12 @@ class HomeActivity: AppCompatActivity() {
         super.attachBaseContext(newBase)
     }
 
+    /**
+     * Método que se encarga de cambiar el idioma de la aplicación en tiempo de ejecución
+     *
+     * @param context Context?
+     * @param languageCode String
+     */
     private fun applyLocale(context: Context?, languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -69,6 +90,11 @@ class HomeActivity: AppCompatActivity() {
         context?.resources?.updateConfiguration(config, context.resources.displayMetrics)
     }
 
+    /**
+     * Método que se encarga del manejo del menú de opciones del ícono de usuario
+     * Se encarga de cerrar la sesión del usuario y cambiar el idioma de la aplicación
+     *
+     */
     private fun setupUserIconMenu() {
         val userIcon = findViewById<ImageView>(R.id.userIcon)
         userIcon.setOnClickListener {
@@ -83,7 +109,6 @@ class HomeActivity: AppCompatActivity() {
             } else {
                 languageMenuItem.title = "Change to Spanish"
             }
-
 
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
@@ -112,6 +137,12 @@ class HomeActivity: AppCompatActivity() {
         }
     }
 
+    /**
+     * Método que se encarga de cambiar el idioma de la aplicación
+     *
+     * @param languageCode String
+     * @param shouldRecreate Boolean
+     */
     private fun setLocale(languageCode: String, shouldRecreate: Boolean = true) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -120,6 +151,7 @@ class HomeActivity: AppCompatActivity() {
         val config = resources.configuration
         config.setLocale(locale)
 
+        // Verificar si la versión de Android es mayor o igual a Nougat
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             baseContext.createConfigurationContext(config)
         } else {
@@ -134,6 +166,11 @@ class HomeActivity: AppCompatActivity() {
         saveLanguageToPreferences(languageCode)
     }
 
+    /**
+     * Método que guarda el idioma seleccionado en las preferencias compartidas
+     *
+     * @param languageCode String
+     */
     private fun saveLanguageToPreferences(languageCode: String) {
         val sharedPref = getSharedPreferences("PantryChef", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
@@ -142,6 +179,11 @@ class HomeActivity: AppCompatActivity() {
         }
     }
 
+    /**
+     * Método que se encarga de manejar un nuevo intent recibido por la actividad
+     *
+     * @param intent Intent?
+     */
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         Log.d("HomeActivity", "onNewIntent: Received new intent")
@@ -149,7 +191,13 @@ class HomeActivity: AppCompatActivity() {
         handleIntent(intent)
     }
 
-    // TODO: Revisar el porqué no se está recibiendo el intent
+    /**
+     * Método que se encarga de manejar el intent recibido por la actividad
+     * Se encarga de navegar a la pantalla de detalle de un paso de una receta si le llega
+     * un intent con información de una notificación de temporizador
+     *
+     * @param intent Intent?
+     */
     private fun handleIntent(intent: Intent?) {
         intent?.let {
             val recipeId = it.getStringExtra("notificationRecipeId") ?: ""

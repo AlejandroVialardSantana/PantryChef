@@ -25,6 +25,10 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 
+/**
+ * Fragmento que muestra la lista de ingredientes de las recetas favoritas del usuario
+ * y permite generar una lista de compras con los ingredientes seleccionados.
+ */
 class ShoppingListFragment : Fragment() {
 
     private lateinit var userController: UserController
@@ -56,7 +60,6 @@ class ShoppingListFragment : Fragment() {
         loadFavoriteIngredients()
 
         view.findViewById<Button>(R.id.buttonMakeShoppingList).setOnClickListener {
-            // TODO: Implementar lógica para hacer la lista de compra
             val selectedIngredients = ingredientsAdapter.ingredientsList
             val selectedIngredientsIds = ingredientsAdapter.selectedIngredientsIds
 
@@ -108,6 +111,10 @@ class ShoppingListFragment : Fragment() {
         context.startActivity(Intent.createChooser(shareIntent, "Share Shopping List"))
     }
 
+    /**
+     * Carga las recetas favoritas del usuario y sus ingredientes.
+     * Configura el Spinner para seleccionar una receta y el RecyclerView para mostrar los ingredientes.
+     */
     private fun loadFavoriteIngredients() {
         val languageCode = Locale.getDefault().language
 
@@ -143,6 +150,9 @@ class ShoppingListFragment : Fragment() {
         )
     }
 
+    /**
+     * Configura el Spinner para seleccionar una receta y cargar los ingredientes correspondientes.
+     */
     private fun setupRecipeSpinner() {
         val spinner: Spinner = requireView().findViewById(R.id.spinnerFilterRecipes)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, recipeNames)
@@ -169,6 +179,11 @@ class ShoppingListFragment : Fragment() {
         }
     }
 
+    /**
+     * Carga los ingredientes de todas las recetas favoritas del usuario.
+     *
+     * @param recipeIds Lista de IDs de las recetas favoritas del usuario
+     */
     private fun loadIngredientsForAllRecipes(recipeIds: List<String>) {
         val allIngredients = mutableSetOf<Ingredient>()
 
@@ -187,6 +202,11 @@ class ShoppingListFragment : Fragment() {
         }
     }
 
+    /**
+     * Carga los ingredientes de una receta específica.
+     *
+     * @param recipeId ID de la receta
+     */
     private fun loadIngredientsForSingleRecipe(recipeId: String) {
         recipeController.getRecipeWithIngredientsById(
             recipeId,

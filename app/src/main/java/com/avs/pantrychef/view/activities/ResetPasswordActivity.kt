@@ -11,15 +11,26 @@ import androidx.appcompat.app.AppCompatActivity
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.AuthController
 
+/**
+ * Actividad para restablecer la contraseña del usuario.
+ *
+ * @property authController Controlador de autenticación.
+ */
 class ResetPasswordActivity: AppCompatActivity() {
 
     private lateinit var authController: AuthController
 
+    /**
+     * Función que se ejecuta al crear la actividad.
+     *
+     * Se encarga de inicializar los elementos de la vista y de asignar los listeners a los botones
+     * para realizar la acción de restablecer la contraseña.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
 
-        authController = AuthController(this)
+        authController = AuthController()
 
         val backIcon: ImageView = findViewById(R.id.backIcon)
         val changePasswordButton: Button = findViewById(R.id.changePasswordButton)
@@ -37,6 +48,13 @@ class ResetPasswordActivity: AppCompatActivity() {
         }
     }
 
+    /**
+     * Función que valida el correo electrónico introducido por el usuario.
+     * Comprueba si el campo está vacío y si el formato del correo electrónico es correcto.
+     *
+     * @param email Correo electrónico introducido por el usuario.
+     * @return Booleano que indica si el correo electrónico es válido o no.
+     */
     private fun validateReset(email: String): Boolean {
         if (email.isEmpty()) {
             Toast.makeText(this, "El campo de correo electrónico está vacío.", Toast.LENGTH_SHORT).show()
@@ -48,6 +66,10 @@ class ResetPasswordActivity: AppCompatActivity() {
         return true
     }
 
+    /**
+     * Función que se ejecuta cuando se ha enviado el correo electrónico para restablecer la contraseña.
+     * Muestra un mensaje de éxito y redirige al usuario a la pantalla de inicio de sesión.
+     */
     private fun onResetSuccess() {
         Toast.makeText(this, "Se ha enviado un correo electrónico para restablecer la contraseña.", Toast.LENGTH_SHORT).show()
 
@@ -58,6 +80,10 @@ class ResetPasswordActivity: AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Función que se ejecuta cuando no se ha podido enviar el correo electrónico para restablecer la contraseña.
+     * Muestra un mensaje de error.
+     */
     private fun onResetFailure() {
         Toast.makeText(this, "No se ha podido enviar el correo electrónico para restablecer la contraseña.", Toast.LENGTH_SHORT).show()
     }

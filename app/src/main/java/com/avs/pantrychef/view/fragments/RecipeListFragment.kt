@@ -18,6 +18,9 @@ import com.avs.pantrychef.controller.UserController
 import com.avs.pantrychef.model.Recipe
 import java.util.Locale
 
+/**
+ * Fragmento para mostrar una lista de recetas basadas en base a los ingredientes seleccionados.
+ */
 class RecipeListFragment : Fragment() {
 
     private val args: RecipeListFragmentArgs by navArgs()
@@ -32,6 +35,9 @@ class RecipeListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_recipe_list, container, false)
     }
 
+    /**
+     * Carga las recetas basadas en los ingredientes seleccionados.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,6 +65,15 @@ class RecipeListFragment : Fragment() {
         })
     }
 
+    /**
+     * Agrega una tarjeta de receta a la vista.
+     * Muestra el nombre, tiempo de preparación y dificultad de la receta.
+     * Además, muestra un ícono de favorito que permite marcar o desmarcar la receta como favorita.
+     *
+     * @param recipe Receta a agregar.
+     * @param ingredientIds Lista de IDs de ingredientes seleccionados.
+     * @param container Contenedor de la vista.
+     */
     private fun addRecipeCardToView(recipe: Recipe, ingredientIds: Array<String>, container: LinearLayout) {
         // Crear una vista de tarjeta para la recetas
         val cardView = layoutInflater.inflate(R.layout.card_recipe, container, false)
@@ -125,6 +140,9 @@ class RecipeListFragment : Fragment() {
         }
     }
 
+    /**
+     * Carga las recetas favoritas del usuario. Para mostrar el ícono de favorito en la lista de recetas.
+     */
     private fun loadFavoriteRecipes() {
         userController.getFavoriteRecipes(onSuccess = { recipes ->
             favoriteRecipes.clear()

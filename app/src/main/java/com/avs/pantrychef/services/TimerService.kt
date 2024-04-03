@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.avs.pantrychef.R
 import com.avs.pantrychef.view.activities.HomeActivity
+import java.util.Locale
 
 class TimerService: Service() {
 
@@ -37,12 +38,34 @@ class TimerService: Service() {
         return START_NOT_STICKY
     }
 
+    /**
+     * Crea un intent que abre la aplicación cuando el usuario toca la notificación
+     *
+     * @return Intent
+     */
+    private fun createNotificationIntent(): Intent {
+        // Crea el intent con los extras necesarios
+        return Intent(this, HomeActivity::class.java).apply {
+            putExtra("notificationRecipeId", recipeId)
+            putExtra("notificationStepIndex", stepIndex)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+    }
+
+    /**
+     * Inicia un temporizador con la duración especificada en minutos
+     *
+     * @param timeInMinutes Int
+     */
     private fun startTimer(timeInMinutes: Int) {
         countDownTimer?.cancel() // Cancelar cualquier timer existente
         countDownTimer = object : CountDownTimer(timeInMinutes * 60 * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                // Actualizar la notificación con el tiempo restante
-                val notification = getUpdatedNotification("Tiempo restante: ${millisUntilFinished / 1000 / 60}:${millisUntilFinished / 1000 % 60}")
+                val minutes = millisUntilFinished / 1000 / 60
+                val seconds = millisUntilFinished / 1000 % 60
+                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+
+                val notification = getUpdatedNotification("Tiempo restante: $formattedTime")
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.notify(NOTIFICATION_ID, notification)
 
@@ -64,14 +87,18 @@ class TimerService: Service() {
         startForeground(NOTIFICATION_ID, initialNotification)
     }
 
+    /**
+     * Crea una notificación actualizada con el texto especificado
+     *
+     * @param contentText String
+     * @return Notification
+     */
     private fun getUpdatedNotification(contentText: String): Notification {
         // Asegurarse de que el canal de notificación esté creado
         createNotificationChannel()
 
         // Configura un intento pendiente que abra la aplicación cuando el usuario toque la notificación
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
+        val intent = createNotificationIntent()
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // Construye y devuelve la notificación actualizada
@@ -84,14 +111,17 @@ class TimerService: Service() {
             .build()
     }
 
+    /**
+     * Crea una notificación inicial para mostrar al usuario cuando el temporizador se inicia
+     *
+     * @return Notification
+     */
     private fun getInitialNotification(): Notification {
         // Asegurarse de que el canal de notificación esté creado
         createNotificationChannel()
 
         // Configura un intento pendiente que abra la aplicación cuando el usuario toque la notificación
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
+        val intent = createNotificationIntent()
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // Construye y devuelve la notificación
@@ -104,15 +134,13 @@ class TimerService: Service() {
             .build()
     }
 
+    /**
+     * Método que notifica al usuario que el tiempo ha terminado
+     */
     private fun notifyUserTimeIsUp() {
         createNotificationChannel()
 
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            putExtra("notificationRecipeId", recipeId)
-            putExtra("notificationStepIndex", stepIndex)
-            // Asegúrate de que el Intent inicie una nueva tarea si la app está en background o no corre:
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
+        val intent = createNotificationIntent()
 
         Log.d("TimerService", "Recipe ID: $recipeId, Step Index: $stepIndex")
 
@@ -138,6 +166,9 @@ class TimerService: Service() {
         const val CHANNEL_ID = "timer_channel"
     }
 
+    /**
+     * Crea un canal de notificación para dispositivos con Android Oreo y superior
+     */
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(R.string.channelName)
@@ -152,9 +183,12 @@ class TimerService: Service() {
         }
     }
 
+    /**
+     * Detiene el temporizador y elimina la notificación cuando el servicio se destruye
+     */
     override fun onDestroy() {
         super.onDestroy()
-        stopForeground(Service.STOP_FOREGROUND_REMOVE)
+        stopForeground(STOP_FOREGROUND_REMOVE)
         countDownTimer?.cancel()
     }
 }

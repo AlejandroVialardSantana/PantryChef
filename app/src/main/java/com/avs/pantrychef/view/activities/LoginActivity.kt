@@ -13,15 +13,28 @@ import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.AuthController
 import org.w3c.dom.Text
 
+/**
+ * Actividad que permite al usuario iniciar sesión en la aplicación.
+ *
+ * @property authController Controlador de autenticación.
+ */
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var authController: AuthController
 
+    /**
+     * Función que se ejecuta al crear la actividad.
+     *
+     * Se encarga de inicializar los elementos de la vista y de asignar los listeners a los botones
+     * que derivan a otras actividades.
+     *
+     * @param savedInstanceState Instancia guardada de la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        authController = AuthController(this)
+        authController = AuthController()
 
         val backIcon: ImageView = findViewById(R.id.backIcon)
         val loginButton: Button = findViewById(R.id.loginPageButton)
@@ -52,6 +65,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Función que valida los campos de correo electrónico y contraseña.
+     *
+     * @param email Correo electrónico introducido por el usuario.
+     * @param password Contraseña introducida por el usuario.
+     * @return Booleano que indica si los campos son válidos.
+     */
     private fun validateLogin(email: String, password: String): Boolean {
         if (email.isEmpty()) {
             Toast.makeText(this, "El campo de correo electrónico está vacío.", Toast.LENGTH_SHORT).show()
@@ -66,6 +86,11 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Función que se ejecuta al iniciar sesión correctamente.
+     *
+     * Muestra un mensaje de éxito y redirige al usuario a la actividad principal.
+     */
     private fun onLoginSuccess() {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
 
@@ -76,6 +101,11 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Función que se ejecuta al fallar el inicio de sesión.
+     *
+     * Muestra un mensaje de error.
+     */
     private fun onLoginFailure() {
         Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
     }

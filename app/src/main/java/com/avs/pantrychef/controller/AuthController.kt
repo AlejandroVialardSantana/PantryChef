@@ -5,7 +5,14 @@ import android.util.Log
 import com.avs.pantrychef.model.User
 import com.google.firebase.auth.FirebaseAuth
 
-class AuthController(private val context: Context) {
+/**
+ * AuthController es responsable de manejar la autenticación de los usuarios.
+ * Se encarga de iniciar sesión, cerrar sesión, registrar un nuevo usuario y restablecer la contraseña.
+ *
+ * @property auth Instancia de FirebaseAuth.
+ * @property userController Instancia de UserController.
+ */
+class AuthController {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var userController: UserController = UserController()
 
@@ -54,6 +61,11 @@ class AuthController(private val context: Context) {
         }
     }
 
+    /**
+     * Verifica si el usuario está logueado.
+     *
+     * @return true si el usuario está logueado, false en caso contrario.
+     */
     fun isUserLoggedIn(): Boolean {
         return auth.currentUser != null
     }

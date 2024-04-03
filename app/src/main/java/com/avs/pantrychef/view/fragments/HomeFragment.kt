@@ -9,6 +9,10 @@ import android.widget.FrameLayout
 import androidx.navigation.fragment.findNavController
 import com.avs.pantrychef.R
 
+/**
+ * Fragmento principal de la aplicación.
+ * Muestra un botón para buscar recetas por ingredientes.
+ */
 class HomeFragment : Fragment() {
 
     override fun onCreateView(

@@ -1,6 +1,5 @@
 package com.avs.pantrychef.view.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.model.Ingredient
 
-class IngredientAdapter(private val ingredients: List<Ingredient>) :
-    RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>(), Filterable {
+/**
+ * Adaptador para el RecyclerView que muestra los ingredientes en un diálogo
+ * para seleccionar ingredientes al presionar el botón de añadir ingredientes
+ * en la pantalla de home.
+ *
+ * @property ingredients Lista de ingredientes a mostrar.
+ */
+class IngredientDialogAdapter(private val ingredients: List<Ingredient>) :
+    RecyclerView.Adapter<IngredientDialogAdapter.IngredientViewHolder>(), Filterable {
 
     var filteredIngredients: List<Ingredient> = emptyList()
     var selectedIngredients: MutableList<Ingredient> = mutableListOf()
@@ -24,11 +30,26 @@ class IngredientAdapter(private val ingredients: List<Ingredient>) :
         val ingredientCheckbox: CheckBox = view.findViewById(R.id.ingredientCheckbox)
     }
 
+    /**
+     * Función que se llama al crear un nuevo ViewHolder.
+     * Crea y devuelve un nuevo ViewHolder que contiene la vista del ingrediente con checkbox.
+     *
+     * @param parent Grupo de vistas al que se añadirá el nuevo ViewHolder.
+     * @param viewType Tipo de vista del nuevo ViewHolder.
+     * @return Nuevo ViewHolder creado.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.ingredient_item, parent, false)
         return IngredientViewHolder(view)
     }
 
+    /**
+     * Función que se llama al enlazar un ViewHolder con un elemento de la lista.
+     * Muestra el nombre del ingrediente y marca el checkbox si está seleccionado.
+     *
+     * @param holder ViewHolder que se va a enlazar.
+     * @param position Posición del elemento en la lista.
+     */
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val ingredient = filteredIngredients[position]
         holder.ingredientName.text = ingredient.name
@@ -47,11 +68,29 @@ class IngredientAdapter(private val ingredients: List<Ingredient>) :
         }
     }
 
+    /**
+     * Función que devuelve el número de elementos en la lista de ingredientes.
+     *
+     * @return Número de elementos en la lista.
+     */
     override fun getItemCount(): Int = filteredIngredients.size
 
+    /**
+     * Función que devuelve los ingredientes seleccionados.
+     *
+     * @return Lista de ingredientes seleccionados.
+     */
     fun getSelectedIngredientsList(): List<Ingredient> {
         return selectedIngredients
     }
+
+    /**
+     * Función que devuelve un filtro para filtrar los ingredientes por nombre.
+     * Se encarga de filtrar los ingredientes según el texto introducido en el campo de búsqueda,
+     * si contiene el texto introducido en el nombre del ingrediente y si no sale vacío.
+     *
+     * @return Filtro para filtrar los ingredientes.
+     */
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
@@ -74,6 +113,13 @@ class IngredientAdapter(private val ingredients: List<Ingredient>) :
         }
     }
 
+    /**
+     * Función que se encarga de añadir o quitar un ingrediente de la lista de seleccionados.
+     * Si el ingrediente ya está en la lista de seleccionados, lo quita.
+     * Si no está en la lista, lo añade.
+     *
+     * @param ingredient Ingrediente que se va a añadir/quitar de la lista de seleccionados.
+     */
     fun toggleIngredientSelection(ingredient: Ingredient) {
         if (selectedIngredients.contains(ingredient)) {
             selectedIngredients.remove(ingredient)

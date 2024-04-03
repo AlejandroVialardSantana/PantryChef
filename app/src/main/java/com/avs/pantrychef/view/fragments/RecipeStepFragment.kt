@@ -21,6 +21,10 @@ import com.avs.pantrychef.model.Step
 import com.avs.pantrychef.services.TimerService
 import java.util.Locale
 
+/**
+ * Fragmento para mostrar los pasos de una receta
+ * con la posibilidad de configurar un cronómetro
+ */
 class RecipeStepFragment: Fragment() {
 
     private val args: RecipeStepFragmentArgs by navArgs()
@@ -38,6 +42,10 @@ class RecipeStepFragment: Fragment() {
             return inflater.inflate(R.layout.fragment_recipe_step, container, false)
     }
 
+    /**
+     * Configura los botones de navegación y cronómetro
+     * y muestra el paso actual
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -79,6 +87,10 @@ class RecipeStepFragment: Fragment() {
         }
     }
 
+    /**
+     * Inicia el servicio del cronómetro
+     * y registra el receptor de actualizaciones
+     */
     override fun onStart() {
         super.onStart()
         val filter = IntentFilter().apply {
@@ -88,11 +100,18 @@ class RecipeStepFragment: Fragment() {
         context?.registerReceiver(timerUpdateReceiver, filter)
     }
 
+    /**
+     * Detiene el servicio del cronómetro
+     * y elimina el receptor de actualizaciones
+     */
     override fun onStop() {
         super.onStop()
         context?.unregisterReceiver(timerUpdateReceiver)
     }
 
+    /**
+     * Receptor de actualizaciones del cronómetro
+     */
     private val timerUpdateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -113,6 +132,12 @@ class RecipeStepFragment: Fragment() {
         }
     }
 
+    /**
+     * Configura el botón del cronómetro
+     * y lo inicia con el tiempo especificado
+     *
+     * @param timeInMinutes tiempo en minutos
+     */
     private fun setupTimerButton(timeInMinutes: Int) {
         val btnSetTimer: Button = requireView().findViewById(R.id.btnSetTimer)
         btnSetTimer.setOnClickListener {
@@ -127,6 +152,11 @@ class RecipeStepFragment: Fragment() {
         }
     }
 
+    /**
+     * Muestra el paso en la vista
+     *
+     * @param index índice del paso
+     */
     private fun displayStep(index: Int) {
         val step = steps[index]
         val stepTitle = getString(R.string.stepTitle, step.order)
@@ -144,6 +174,9 @@ class RecipeStepFragment: Fragment() {
         updateStepNavigationButtons()
     }
 
+    /**
+     * Configura el TextToSpeech para leer los pasos
+     */
     private fun setupTextToSpeech() {
         textToSpeech = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
@@ -157,12 +190,18 @@ class RecipeStepFragment: Fragment() {
         }
     }
 
+    /**
+     * Lee el paso actual en voz alta con TextToSpeech
+     */
     private fun readCurrentStep() {
         steps.getOrNull(currentStepIndex)?.let { step ->
             textToSpeech.speak(step.description, TextToSpeech.QUEUE_FLUSH, null, null)
         }
     }
 
+    /**
+     * Actualiza la visibilidad de los botones de navegación en base a si el cronómetro está corriendo
+     */
     private fun updateStepNavigationButtons() {
         val nextStepButton: ImageView = requireView().findViewById(R.id.nextStep)
         val previousStepButton: ImageView = requireView().findViewById(R.id.previousStep)
@@ -172,6 +211,9 @@ class RecipeStepFragment: Fragment() {
         previousStepButton.isEnabled = enableButtons && currentStepIndex > 0
     }
 
+    /**
+     * Detiene el TextToSpeech al destruir el fragmento
+     */
     override fun onDestroy() {
         if (::textToSpeech.isInitialized) {
             textToSpeech.stop()

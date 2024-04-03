@@ -7,10 +7,23 @@ import com.avs.pantrychef.model.RecipeIngredient
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * RecipeController es responsable de manejar las operaciones relacionadas con los documentos de la colección "recipes" en Firestore.
+ *
+ * @property db Instancia de FirebaseFirestore.
+ */
 class RecipeController {
 
     private val db = FirebaseFirestore.getInstance()
 
+    /**
+     * fetchRecipesByIngredients recupera las recetas que contienen los ingredientes especificados por el usuario.
+     *
+     * @param ingredientIds Arreglo de IDs de ingredientes.
+     * @param languageCode Código de idioma para obtener los campos de idioma correspondientes.
+     * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
+     * @param onFailure Función de retorno que se ejecuta si la operación falla.
+     */
     fun fetchRecipesByIngredients(ingredientIds: Array<String>, languageCode: String, onSuccess: (List<Recipe>) -> Unit, onFailure: (Exception) -> Unit) {
 
         if (ingredientIds.isEmpty()) {
@@ -30,6 +43,14 @@ class RecipeController {
             }
     }
 
+    /**
+     * fetchRecipesByIds recupera las recetas por sus IDs.
+     *
+     * @param recipeIds Lista de IDs de recetas.
+     * @param languageCode Código de idioma para obtener los campos de idioma correspondientes.
+     * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
+     * @param onFailure Función de retorno que se ejecuta si la operación falla.
+     */
     fun fetchRecipesByIds(recipeIds: List<String?>, languageCode: String, onSuccess: (List<Recipe>) -> Unit, onFailure: (Exception) -> Unit) {
         if (recipeIds.isEmpty()) {
             onSuccess(emptyList())
@@ -64,6 +85,14 @@ class RecipeController {
             }
     }
 
+    /**
+     * getRecipeById obtiene una receta única por su ID.
+     *
+     * @param recipeId ID de la receta.
+     * @param languageCode Código de idioma para obtener los campos de idioma correspondientes.
+     * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
+     * @param onFailure Función de retorno que se ejecuta si la operación falla.
+     */
     fun getRecipeById(recipeId: String, languageCode: String, onSuccess: (Recipe) -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("recipes")
             .document(recipeId)
@@ -93,7 +122,14 @@ class RecipeController {
             }
     }
 
-    // Método para obtener una receta y sus ingredientes por ID
+    /**
+     * getRecipeIngredientsByIds obtiene los ingredientes de una receta por sus IDs.
+     *
+     * @param recipeIngredientIds Lista de IDs de ingredientes de la receta.
+     * @param languageCode Código de idioma para obtener los campos de idioma correspondientes.
+     * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
+     * @param onFailure Función de retorno que se ejecuta si la operación falla.
+     */
     private fun getRecipeIngredientsByIds(recipeIngredientIds: List<String>, languageCode: String, onSuccess: (List<RecipeIngredient>) -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("recipe_ingredients")
             .whereIn(FieldPath.documentId(), recipeIngredientIds)
@@ -106,6 +142,14 @@ class RecipeController {
             }
     }
 
+    /**
+     * getIngredientsDetails obtiene los detalles de los ingredientes por sus IDs.
+     *
+     * @param ids Lista de IDs de ingredientes.
+     * @param languageCode Código de idioma para obtener los campos de idioma correspondientes.
+     * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
+     * @param onFailure Función de retorno que se ejecuta si la operación falla.
+     */
     private fun getIngredientsDetails(ids: List<String>, languageCode: String, onSuccess: (List<Ingredient>) -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("ingredients")
             .whereIn(FieldPath.documentId(), ids)
@@ -131,6 +175,14 @@ class RecipeController {
             }
     }
 
+    /**
+     * getRecipeWithIngredientsById obtiene una receta con sus ingredientes por su ID.
+     *
+     * @param recipeId ID de la receta.
+     * @param languageCode Código de idioma para obtener los campos de idioma correspondientes.
+     * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
+     * @param onFailure Función de retorno que se ejecuta si la operación falla.
+     */
     fun getRecipeWithIngredientsById(recipeId: String, languageCode: String, onSuccess: (Recipe, List<Ingredient>) -> Unit, onFailure: (Exception) -> Unit) {
         getRecipeById(recipeId, languageCode, { recipe ->
             // Verifica si la receta tiene ingredientes

@@ -9,6 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.model.Ingredient
 
+/**
+ * Adapter para la lista de ingredientes dentro de las recetas o de la lista de la compra.
+ *
+ * @param ingredients Lista de ingredientes a mostrar.
+ * @param selectedIngredientsIds Lista de IDs de ingredientes seleccionados.
+ */
 class IngredientListAdapter(
     private val ingredients: List<Ingredient>,
     selectedIngredientsIds: List<String>
@@ -28,6 +34,10 @@ class IngredientListAdapter(
         return IngredientViewHolder(view)
     }
 
+    /**
+     * Actualiza la lista de ingredientes seleccionados.
+     * Maneja también si ya hay algún ingrediente seleccionado.
+     */
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val ingredient = ingredients[position]
 
@@ -49,5 +59,8 @@ class IngredientListAdapter(
         holder.ingredientName.text = ingredient.name
     }
 
+    /**
+     * Devuelve la cantidad de ingredientes en la lista.
+     */
     override fun getItemCount(): Int = ingredients.size
 }
