@@ -35,8 +35,6 @@
 
     <!-- Recipe List -->
     <string name="addFav">Añadir a favoritos</string>
-    <string name="channelName">PantryChef</string>
-    <string name="channelDescription">El tiempo ha terminado.</string>
 
     <!-- Recipe Step -->
     <string name="setTimer">Poner cronómetro</string>
@@ -61,8 +59,18 @@
     <string name="shoppingListBtnText">Hacer lista de la compra</string>
     <string name="startCookingBtnText">Empezar a cocinar</string>
 
+    <!-- Shopping List -->
+    <string name="shoppingListTitle">Lista de la compra</string>
+    <string name="noItems">No tienes ningún artículo</string>
+    <string name="allRecipes">Todas las recetas</string>
+
     <!-- Timer -->
     <string name="timerRunning">Temporizador en Ejecución</string>
     <string name="timerNotificationText">Tu tiempo de cocción está corriendo. Toca para más detalles.</string>
+    <string name="timerStarted">Temporizador iniciado</string>
+    <string name="timerTitle">Pantrychef cronómetro</string>
+    <string name="timerTimeLeft">Tiempo restante: %1$s min</string>
+    <string name="channelName">PantryChef</string>
+    <string name="channelDescription">El tiempo ha terminado.</string>
 
 </resources>

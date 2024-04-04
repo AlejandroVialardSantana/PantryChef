@@ -59,9 +59,17 @@
     <string name="shoppingListBtnText">Make shopping list</string>
     <string name="startCookingBtnText">Start cooking</string>
 
+    <!-- Shopping List -->
+    <string name="shoppingListTitle">Shopping list</string>
+    <string name="noItems">You dont have any items</string>
+    <string name="allRecipes">All recipes</string>
+
     <!-- Timer -->
     <string name="timerRunning">Timer running</string>
     <string name="timerNotificationText">Your timer is running. Tap for more details.</string>
+    <string name="timerStarted">Timer started</string>
+    <string name="timerTitle">Pantrychef timer</string>
+    <string name="timerTimeLeft">Time left: %1$s min</string>
     <string name="channelName">PantryChef</string>
     <string name="channelDescription">Time is finished.</string>
 

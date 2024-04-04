@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.RecipeController
 import com.avs.pantrychef.controller.UserController
+import com.avs.pantrychef.helpers.ShoppingListHelper
 import com.avs.pantrychef.model.Ingredient
 import com.avs.pantrychef.view.adapters.IngredientListAdapter
 import java.io.File
@@ -36,6 +37,7 @@ class ShoppingListFragment : Fragment() {
     private lateinit var ingredientsAdapter: IngredientListAdapter
     private lateinit var recipeNames: MutableList<String>
     private lateinit var recipeMap: MutableMap<String, String>
+    private val shoppingListHelper = ShoppingListHelper()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,52 +65,11 @@ class ShoppingListFragment : Fragment() {
             val selectedIngredients = ingredientsAdapter.ingredientsList
             val selectedIngredientsIds = ingredientsAdapter.selectedIngredientsIds
 
-            val fileUri = createShoppingListFile(
-                selectedIngredients,
-                selectedIngredientsIds,
-                requireContext()
-            )
+            val fileUri = shoppingListHelper.createShoppingListFile(selectedIngredients, selectedIngredientsIds, requireContext())
             if (fileUri != null) {
-                shareShoppingListFile(fileUri, requireContext())
+                shoppingListHelper.shareShoppingListFile(fileUri, requireContext())
             }
         }
-    }
-
-    private fun createShoppingListFile(
-        ingredients: List<Ingredient>,
-        userIngredientsIds: List<String>,
-        context: Context
-    ): Uri? {
-        // Generar el contenido del archivo marcando los ingredientes que el usuario ya tiene
-        val shoppingListContent = ingredients.joinToString(separator = "\n") { ingredient ->
-            if (userIngredientsIds.contains(ingredient.id)) {
-                "- [X] ${ingredient.name}" // Marcar el ingrediente como ya poseído
-            } else {
-                "- [ ] ${ingredient.name}" // Ingrediente no poseído
-            }
-        }
-
-        Log.d("IngredientsListFragment", "Contenido de la lista de compras: $shoppingListContent")
-
-        try {
-            val file = File(context.filesDir, "shoppingList.txt")
-            file.writeText(shoppingListContent)
-            return FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-        } catch (e: IOException) {
-            Log.e("IngredientsListFragment", "Error al crear el archivo de la lista de compras", e)
-            return null
-        }
-    }
-
-    // Intent para compartir el archivo de la lista de compras y poder enviarlo por correo, WhatsApp, Notas, etc.
-    private fun shareShoppingListFile(fileUri: Uri, context: Context) {
-        val shareIntent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, fileUri)
-            type = "text/plain"
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        context.startActivity(Intent.createChooser(shareIntent, "Share Shopping List"))
     }
 
     /**
@@ -120,7 +81,7 @@ class ShoppingListFragment : Fragment() {
 
         userController.getFavoriteRecipes(
             onSuccess = { favoriteRecipeIds ->
-                recipeNames = mutableListOf("Todas")
+                recipeNames = mutableListOf(getString(R.string.allRecipes))
                 recipeMap = mutableMapOf()
 
                 favoriteRecipeIds.forEachIndexed { index, recipeId ->

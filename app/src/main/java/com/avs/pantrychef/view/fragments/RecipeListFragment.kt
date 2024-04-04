@@ -121,7 +121,7 @@ class RecipeListFragment : Fragment() {
             if (isFavorite) {
                 userController.removeRecipeFromFavorites(recipe.id,
                     onSuccess = {
-                        favoriteIcon.setImageResource(R.drawable.ic_favs) // Ícono para no favorito
+                        favoriteIcon.setImageResource(R.drawable.ic_favs) // Icono para no favorito
                         favoriteRecipes.remove(recipe.id)
                     },
                     onFailure = { error ->
@@ -130,7 +130,7 @@ class RecipeListFragment : Fragment() {
             } else {
                 userController.addRecipeToFavorites(recipe.id,
                     onSuccess = {
-                        favoriteIcon.setImageResource(R.drawable.ic_fav_filled) // Ícono para favorito
+                        favoriteIcon.setImageResource(R.drawable.ic_fav_filled) // Icono para favorito
                         favoriteRecipes.add(recipe.id)
                     },
                     onFailure = { error ->

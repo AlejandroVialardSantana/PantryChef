@@ -23,7 +23,6 @@ class TimerService: Service() {
     private var recipeId: String? = null
     private var stepIndex: Int = -1
 
-
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -65,7 +64,7 @@ class TimerService: Service() {
                 val seconds = millisUntilFinished / 1000 % 60
                 val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
 
-                val notification = getUpdatedNotification("Tiempo restante: $formattedTime")
+                val notification = getUpdatedNotification(getString(R.string.timerTimeLeft, formattedTime))
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.notify(NOTIFICATION_ID, notification)
 
@@ -103,7 +102,7 @@ class TimerService: Service() {
 
         // Construye y devuelve la notificación actualizada
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("PantryChef Timer")
+            .setContentTitle(getString(R.string.timerTitle))
             .setContentText(contentText)
             .setSmallIcon(R.drawable.ic_timer)
             .setContentIntent(pendingIntent)
@@ -127,7 +126,7 @@ class TimerService: Service() {
         // Construye y devuelve la notificación
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("PantryChef Timer")
-            .setContentText("Tu temporizador está corriendo...")
+            .setContentText(getString(R.string.timerStarted))
             .setSmallIcon(R.drawable.ic_timer)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

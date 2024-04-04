@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.RecipeController
+import com.avs.pantrychef.helpers.ShoppingListHelper
 import com.avs.pantrychef.model.Ingredient
 import com.avs.pantrychef.view.adapters.IngredientListAdapter
 import java.io.File
@@ -33,6 +34,7 @@ class IngredientsListFragment: Fragment() {
     private val args: IngredientsListFragmentArgs by navArgs()
     private lateinit var ingredientsAdapter: IngredientListAdapter
     private val recipeController = RecipeController()
+    private val shoppingListHelper = ShoppingListHelper()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,13 +80,13 @@ class IngredientsListFragment: Fragment() {
             val selectedIngredients = ingredientsAdapter.ingredientsList
             val selectedIngredientsIds = ingredientsAdapter.selectedIngredientsIds
 
-            val fileUri = createShoppingListFile(
+            val fileUri = shoppingListHelper.createShoppingListFile(
                 selectedIngredients,
                 selectedIngredientsIds,
                 requireContext()
             )
             if (fileUri != null) {
-                shareShoppingListFile(fileUri, requireContext())
+                shoppingListHelper.shareShoppingListFile(fileUri, requireContext())
             }
         }
 
@@ -106,48 +108,5 @@ class IngredientsListFragment: Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         ingredientsAdapter = IngredientListAdapter(ingredients, selectedIngredientsIds)
         recyclerView.adapter = ingredientsAdapter
-    }
-
-    /**
-     * Crea un archivo de texto con la lista de compra y lo guarda en el directorio de archivos de la app.
-     * Retorna la URI del archivo creado.
-     */
-    private fun createShoppingListFile(
-        ingredients: List<Ingredient>,
-        userIngredientsIds: List<String>,
-        context: Context
-    ): Uri? {
-        // Generar el contenido del archivo marcando los ingredientes que el usuario ya tiene
-        val shoppingListContent = ingredients.joinToString(separator = "\n") { ingredient ->
-            if (userIngredientsIds.contains(ingredient.id)) {
-                "- [X] ${ingredient.name}" // Marcar el ingrediente como ya poseído
-            } else {
-                "- [ ] ${ingredient.name}" // Ingrediente no poseído
-            }
-        }
-
-        Log.d("IngredientsListFragment", "Contenido de la lista de compras: $shoppingListContent")
-
-        try {
-            val file = File(context.filesDir, "shoppingList.txt")
-            file.writeText(shoppingListContent)
-            return FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-        } catch (e: IOException) {
-            Log.e("IngredientsListFragment", "Error al crear el archivo de la lista de compras", e)
-            return null
-        }
-    }
-
-    /**
-     * Comparte el archivo de la lista de compras con otras apps.
-     */
-    private fun shareShoppingListFile(fileUri: Uri, context: Context) {
-        val shareIntent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, fileUri)
-            type = "text/plain"
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        context.startActivity(Intent.createChooser(shareIntent, "Share Shopping List"))
     }
 }
