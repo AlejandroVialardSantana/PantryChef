@@ -43,7 +43,11 @@
         android:id="@+id/favsFragment"
         android:name="com.avs.pantrychef.view.fragments.FavsFragment"
         android:label="FavsFragment"
-        tools:layout="@layout/fragment_favs" />
+        tools:layout="@layout/fragment_favs" >
+        <action
+            android:id="@+id/action_favsFragment_to_ingredientsListFragment"
+            app:destination="@id/ingredientsListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ingredientsListFragment"
         android:name="com.avs.pantrychef.view.fragments.IngredientsListFragment"

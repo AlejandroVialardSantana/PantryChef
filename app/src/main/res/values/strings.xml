@@ -35,6 +35,7 @@
 
     <!-- Recipe List -->
     <string name="addFav">Añadir a favoritos</string>
+    <string name="recipeTitle">Recetas</string>
 
     <!-- Recipe Step -->
     <string name="setTimer">Poner cronómetro</string>

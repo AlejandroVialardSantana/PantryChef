@@ -18,10 +18,9 @@ import com.avs.pantrychef.model.Recipe
  * @param onFavoriteSelected Función a ejecutar cuando se selecciona un favorito.
  */
 class RecipeAdapter(private val recipes: MutableList<Recipe>,
-                    private val onFavoriteSelected: (Recipe) -> Unit) :
+                    private val onFavoriteSelected: (Recipe) -> Unit,
+                    private val onRecipeClicked: (String) -> Unit) :
     RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
-
-    private var onRecipeSelected: ((Recipe) -> Unit)? = null
 
     class RecipeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val recipeName: TextView = view.findViewById(R.id.recipeName)
@@ -47,7 +46,7 @@ class RecipeAdapter(private val recipes: MutableList<Recipe>,
         holder.recipeDifficulty.text = "Dificultad: ${recipe.difficulty}"
 
         holder.itemView.setOnClickListener {
-            onRecipeSelected?.invoke(recipe)
+            onRecipeClicked(recipe.id)
         }
 
         holder.favoriteIcon.setImageResource(

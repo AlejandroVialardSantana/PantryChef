@@ -51,6 +51,10 @@ class HomeActivity: AppCompatActivity() {
                     navController.navigate(R.id.homeFragment)
                     true
                 }
+                R.id.favsFragment -> {
+                    navController.navigate(R.id.favsFragment)
+                    true
+                }
                 else -> {
                     item.onNavDestinationSelected(navController)
                 }

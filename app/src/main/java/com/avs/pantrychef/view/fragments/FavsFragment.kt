@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
@@ -68,13 +69,24 @@ class FavsFragment : Fragment() {
      * @param recipes Lista de recetas favoritas
      */
     private fun setupRecyclerView(recipes: List<Recipe>) {
-        recipeAdapter = RecipeAdapter(recipes.toMutableList(), onFavoriteSelected = { recipe ->
-            userController.removeRecipeFromFavorites(recipe.id, onSuccess = {
-                recipeAdapter.removeRecipe(recipe)
-            }, onFailure = {
-                Log.e("FavsFragment", "Error removing recipe from favorites")
-            })
-        })
+        recipeAdapter = RecipeAdapter(
+            recipes.toMutableList(),
+            onFavoriteSelected = { recipe ->
+                userController.removeRecipeFromFavorites(recipe.id, onSuccess = {
+                    activity?.runOnUiThread {
+                        recipeAdapter.removeRecipe(recipe)
+                    }
+                }, onFailure = {
+                    Log.e("FavsFragment", "Error removing favorite recipe")
+                })
+            },
+            onRecipeClicked = { recipeId ->
+                // Navegar a IngredientsListFragment aquí
+                val action = FavsFragmentDirections.actionFavsFragmentToIngredientsListFragment(recipeId, emptyArray())
+                findNavController().navigate(action)
+            }
+        )
         recyclerView.adapter = recipeAdapter
     }
+
 }
