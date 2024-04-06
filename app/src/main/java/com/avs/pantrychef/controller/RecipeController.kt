@@ -2,6 +2,7 @@ package com.avs.pantrychef.controller
 
 import android.util.Log
 import com.avs.pantrychef.model.Ingredient
+import com.avs.pantrychef.model.IngredientWithQuantity
 import com.avs.pantrychef.model.Recipe
 import com.avs.pantrychef.model.RecipeIngredient
 import com.google.firebase.firestore.FieldPath
@@ -183,50 +184,35 @@ class RecipeController {
      * @param onSuccess Función de retorno que se ejecuta si la operación es exitosa.
      * @param onFailure Función de retorno que se ejecuta si la operación falla.
      */
-    fun getRecipeWithIngredientsById(recipeId: String, languageCode: String, onSuccess: (Recipe, List<Ingredient>) -> Unit, onFailure: (Exception) -> Unit) {
+    fun getRecipeWithIngredientsById(recipeId: String, languageCode: String, onSuccess: (Recipe, List<IngredientWithQuantity>) -> Unit, onFailure: (Exception) -> Unit) {
         getRecipeById(recipeId, languageCode, { recipe ->
-            // Verifica si la receta tiene ingredientes
-            if (recipe.ingredients.isNotEmpty()) {
-                Log.d("RecipeController", "Recipe has ingredients: ${recipe.ingredients}")
-
-                getRecipeIngredientsByIds(recipe.ingredients, languageCode, { recipeIngredients ->
-                    // Extrae los IDs de ingredientes de 'recipeIngredients'
-                    val ingredientIds = recipeIngredients.mapNotNull { it.ingredientId }
-
-                    // Obtiene los detalles de los ingredientes
-                    if (ingredientIds.isNotEmpty()) {
-                        getIngredientsDetails(ingredientIds, languageCode, { ingredients ->
-                            onSuccess(recipe, ingredients)
-                        }, onFailure)
-                    } else {
-                        // Manejar el caso en que no hay ingredientIds
-                        onSuccess(recipe, emptyList())
-                    }
-                }, onFailure)
-            } else {
-                // Manejar el caso en que la receta no tiene ingredientes listados
-                Log.d("RecipeController", "Recipe has no ingredients")
+            // Si la receta no tiene ingredientes, retorna una lista vacía.
+            if (recipe.ingredients.isEmpty()) {
                 onSuccess(recipe, emptyList())
+                return@getRecipeById
             }
+
+            // Obtiene los detalles de los ingredientes y sus cantidades
+            val recipeIngredientsDetails = mutableListOf<IngredientWithQuantity>()
+
+            // Obtiene los RecipeIngredient que contienen los IDs y las cantidades
+            getRecipeIngredientsByIds(recipe.ingredients, languageCode, { recipeIngredients ->
+                // Para cada RecipeIngredient, busca el detalle del ingrediente y crea un IngredientWithQuantity
+                recipeIngredients.forEach { recipeIngredient ->
+                    getIngredientsDetails(listOf(recipeIngredient.ingredientId), languageCode, { ingredientDetails ->
+                        val ingredientDetail = ingredientDetails.firstOrNull()
+                        ingredientDetail?.let {
+                            val ingredientWithQuantity = IngredientWithQuantity(it, recipeIngredient.quantity)
+                            recipeIngredientsDetails.add(ingredientWithQuantity)
+
+                            // Verifica si todos los ingredientes han sido procesados
+                            if (recipeIngredientsDetails.size == recipe.ingredients.size) {
+                                onSuccess(recipe, recipeIngredientsDetails)
+                            }
+                        }
+                    }, onFailure)
+                }
+            }, onFailure)
         }, onFailure)
     }
-
-    fun getRecipeQuantity(recipeId: String, ingredientId: String, onSuccess: (Int) -> Unit, onFailure: (Exception) -> Unit) {
-        db.collection("recipe_ingredients")
-            .whereEqualTo("recipeId", recipeId)
-            .whereEqualTo("ingredientId", ingredientId)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot.isEmpty) {
-                    onSuccess(0)
-                } else {
-                    val recipeIngredient = querySnapshot.documents.first().toObject(RecipeIngredient::class.java)
-                    onSuccess(recipeIngredient?.quantity?.toInt() ?: 0)
-                }
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
-    }
-
 }

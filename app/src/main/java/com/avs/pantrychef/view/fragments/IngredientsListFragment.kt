@@ -20,6 +20,7 @@ import com.avs.pantrychef.R
 import com.avs.pantrychef.controller.RecipeController
 import com.avs.pantrychef.helpers.ShoppingListHelper
 import com.avs.pantrychef.model.Ingredient
+import com.avs.pantrychef.model.IngredientWithQuantity
 import com.avs.pantrychef.view.adapters.IngredientListAdapter
 import java.io.File
 import java.io.IOException
@@ -58,8 +59,8 @@ class IngredientsListFragment: Fragment() {
         recipeController.getRecipeWithIngredientsById(
             recipeId,
             languageCode,
-            { recipe, ingredients ->
-                Log.d("IngredientsList", "Ingredientes: $ingredients")
+            { recipe, ingredientsWithQuantity ->
+                Log.d("IngredientsList", "Ingredientes: $ingredientsWithQuantity")
                 activity?.runOnUiThread {
                     // Actualizar la UI con los detalles de la receta
                     view.findViewById<TextView>(R.id.tvRecipeName).text = recipe.title
@@ -69,7 +70,7 @@ class IngredientsListFragment: Fragment() {
                         getString(R.string.difficulty, recipe.difficulty)
 
                     // Configurar el RecyclerView con los ingredientes
-                    setupRecyclerView(ingredients, ingredientsIds)
+                    setupRecyclerView(ingredientsWithQuantity, ingredientsIds)
                 }
             },
             { exception ->
@@ -77,11 +78,11 @@ class IngredientsListFragment: Fragment() {
             })
 
         view.findViewById<Button>(R.id.btnMakeShoppingList).setOnClickListener {
-            val selectedIngredients = ingredientsAdapter.ingredientsList
+            val ingredientsWithQuantity = ingredientsAdapter.getIngredientsWithQuantity()
             val selectedIngredientsIds = ingredientsAdapter.selectedIngredientsIds
 
             val fileUri = shoppingListHelper.createShoppingListFile(
-                selectedIngredients,
+                ingredientsWithQuantity,
                 selectedIngredientsIds,
                 requireContext()
             )
@@ -97,16 +98,16 @@ class IngredientsListFragment: Fragment() {
     }
 
     private fun setupRecyclerView(
-        ingredients: List<Ingredient>,
+        ingredientsWithQuantity: List<IngredientWithQuantity>,
         selectedIngredientsIds: List<String>
     ) {
         val recyclerView: RecyclerView = requireView().findViewById(R.id.ingredientRecyclerView)
         Log.d(
             "IngredientsListFragment",
-            "Setting up RecyclerView with ${ingredients.size} ingredients."
+            "Setting up RecyclerView with ${ingredientsWithQuantity.size} ingredients."
         )
         recyclerView.layoutManager = LinearLayoutManager(context)
-        ingredientsAdapter = IngredientListAdapter(ingredients, selectedIngredientsIds)
+        ingredientsAdapter = IngredientListAdapter(ingredientsWithQuantity, selectedIngredientsIds)
         recyclerView.adapter = ingredientsAdapter
     }
 }

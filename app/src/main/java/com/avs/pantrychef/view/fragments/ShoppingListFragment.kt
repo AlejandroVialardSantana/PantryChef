@@ -21,6 +21,7 @@ import com.avs.pantrychef.controller.RecipeController
 import com.avs.pantrychef.controller.UserController
 import com.avs.pantrychef.helpers.ShoppingListHelper
 import com.avs.pantrychef.model.Ingredient
+import com.avs.pantrychef.model.IngredientWithQuantity
 import com.avs.pantrychef.view.adapters.IngredientListAdapter
 import java.io.File
 import java.io.IOException
@@ -62,10 +63,10 @@ class ShoppingListFragment : Fragment() {
         loadFavoriteIngredients()
 
         view.findViewById<Button>(R.id.buttonMakeShoppingList).setOnClickListener {
-            val selectedIngredients = ingredientsAdapter.ingredientsList
+            val selectedIngredientsWithQuantity = ingredientsAdapter.getIngredientsWithQuantity()
             val selectedIngredientsIds = ingredientsAdapter.selectedIngredientsIds
 
-            val fileUri = shoppingListHelper.createShoppingListFile(selectedIngredients, selectedIngredientsIds, requireContext())
+            val fileUri = shoppingListHelper.createShoppingListFile(selectedIngredientsWithQuantity, selectedIngredientsIds, requireContext())
             if (fileUri != null) {
                 shoppingListHelper.shareShoppingListFile(fileUri, requireContext())
             }
@@ -146,18 +147,21 @@ class ShoppingListFragment : Fragment() {
      * @param recipeIds Lista de IDs de las recetas favoritas del usuario
      */
     private fun loadIngredientsForAllRecipes(recipeIds: List<String>) {
-        val allIngredients = mutableSetOf<Ingredient>()
+        val allIngredientsWithQuantity = mutableListOf<IngredientWithQuantity>()
 
-        recipeIds.forEach { recipeId ->
+        recipeIds.forEachIndexed { index, recipeId ->
             recipeController.getRecipeWithIngredientsById(
                 recipeId,
                 Locale.getDefault().language,
-                { _, ingredients ->
-                    allIngredients.addAll(ingredients)
-                    setupRecyclerView(allIngredients.toList())
+                { _, ingredientsWithQuantity ->
+                    allIngredientsWithQuantity.addAll(ingredientsWithQuantity)
+                    // Asegurarse de actualizar el RecyclerView solo después de cargar todos los ingredientes
+                    if (index == recipeIds.size - 1) {
+                        setupRecyclerView(allIngredientsWithQuantity)
+                    }
                 },
                 { exception ->
-                    Log.e("ShoppingListFragment", "Error loading ingredients for all recipes", exception)
+                    Log.e("ShoppingListFragment", "Error loading ingredients for recipe $recipeId", exception)
                 }
             )
         }
@@ -172,8 +176,8 @@ class ShoppingListFragment : Fragment() {
         recipeController.getRecipeWithIngredientsById(
             recipeId,
             Locale.getDefault().language,
-            { _, ingredients ->
-                setupRecyclerView(ingredients)
+            { _, ingredientsWithQuantity ->
+                setupRecyclerView(ingredientsWithQuantity)
             },
             { exception ->
                 Log.e("ShoppingListFragment", "Error loading ingredients for recipe $recipeId", exception)
@@ -181,8 +185,8 @@ class ShoppingListFragment : Fragment() {
         )
     }
 
-    private fun setupRecyclerView(ingredients: List<Ingredient>, selectedIngredientsIds: List<String> = emptyList()) {
-        ingredientsAdapter = IngredientListAdapter(ingredients, selectedIngredientsIds)
+    private fun setupRecyclerView(ingredientsWithQuantity: List<IngredientWithQuantity>, selectedIngredientsIds: List<String> = emptyList()) {
+        ingredientsAdapter = IngredientListAdapter(ingredientsWithQuantity, selectedIngredientsIds)
         view?.findViewById<RecyclerView>(R.id.ingredientsShoppingRecyclerView)?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = ingredientsAdapter

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.avs.pantrychef.R
 import com.avs.pantrychef.model.Ingredient
+import com.avs.pantrychef.model.IngredientWithQuantity
 
 /**
  * Adapter para la lista de ingredientes dentro de las recetas o de la lista de la compra.
@@ -16,13 +17,12 @@ import com.avs.pantrychef.model.Ingredient
  * @param selectedIngredientsIds Lista de IDs de ingredientes seleccionados.
  */
 class IngredientListAdapter(
-    private val ingredients: List<Ingredient>,
+    private val ingredientsWithQuantity:List<IngredientWithQuantity>,
     selectedIngredientsIds: List<String>
 ) : RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>() {
 
     private val _selectedIngredientsIds: MutableList<String> = selectedIngredientsIds.toMutableList()
     val selectedIngredientsIds: List<String> get() = _selectedIngredientsIds
-    val ingredientsList: List<Ingredient> get() = ingredients
 
     class IngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ingredientName: TextView = view.findViewById(R.id.ingredientName)
@@ -39,7 +39,12 @@ class IngredientListAdapter(
      * Maneja también si ya hay algún ingrediente seleccionado.
      */
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        val ingredient = ingredients[position]
+        val ingredientWithQuantity = ingredientsWithQuantity[position]
+        val ingredient = ingredientWithQuantity.ingredient
+        val quantity = ingredientWithQuantity.quantity
+
+        val displayText = "${ingredient.name} - $quantity ${ingredient.measurementUnit}"
+        holder.ingredientName.text = displayText
 
         // Quitar temporalmente el listener para evitar triggers indeseados
         holder.ingredientCheckbox.setOnCheckedChangeListener(null)
@@ -55,12 +60,18 @@ class IngredientListAdapter(
                 _selectedIngredientsIds.remove(ingredient.id)
             }
         }
-
-        holder.ingredientName.text = ingredient.name
     }
+
+    /**
+     * Devuelve la lista de ingredientes con sus cantidades.
+     */
+    fun getIngredientsWithQuantity(): List<IngredientWithQuantity> {
+        return ingredientsWithQuantity
+    }
+
 
     /**
      * Devuelve la cantidad de ingredientes en la lista.
      */
-    override fun getItemCount(): Int = ingredients.size
+    override fun getItemCount(): Int = ingredientsWithQuantity.size
 }
