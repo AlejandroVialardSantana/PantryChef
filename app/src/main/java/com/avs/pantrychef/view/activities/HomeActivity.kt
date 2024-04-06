@@ -15,6 +15,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.ui.onNavDestinationSelected
 import com.avs.pantrychef.view.fragments.IngredientsListFragmentDirections
 
@@ -60,6 +61,18 @@ class HomeActivity: AppCompatActivity() {
                 }
             }
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Si la pantalla actual es una de las pantallas principales, finaliza la actividad
+                if (navController.currentDestination?.id in arrayOf(R.id.homeFragment, R.id.favsFragment, R.id.shoppingListFragment)) {
+                    finish()
+                } else {
+                    // Si no, navega hacia atrás en la pila de navegación
+                    navController.navigateUp()
+                }
+            }
+        })
 
         setupUserIconMenu()
 
