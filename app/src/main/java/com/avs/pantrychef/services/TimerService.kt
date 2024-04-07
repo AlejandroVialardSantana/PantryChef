@@ -14,7 +14,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.avs.pantrychef.R
-import com.avs.pantrychef.view.activities.HomeActivity
+import com.avs.pantrychef.views.activities.HomeActivity
 import java.util.Locale
 
 class TimerService: Service() {
